@@ -21,10 +21,18 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
-var GENERATE_PINS = 8;
 
+var AppartmentTypes = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'bungalo': 'Бунгало',
+  'house': 'Дом'
+};
+var GENERATE_PINS = 8;
+var template = document.querySelector('template');
 
 document.querySelector('.map').classList.remove('map--faded');
+
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -62,12 +70,10 @@ var generateAdContents = function () {
 var pinContents = generateAdContents();
 
 var createPin = function (adContents) {
-  var templatePin = document.querySelector('template').content.querySelector('.map__pin');
+  var templatePin = template.content.querySelector('.map__pin');
   var myPin = templatePin.cloneNode(true);
   var myPinImg = myPin.querySelector('img');
 
-  myPin = templatePin.cloneNode(true);
-  myPinImg = myPin.querySelector('img');
   myPin.style.left = adContents.location.x - 25 + 'px';
   myPin.style.top = adContents.location.y - 35 + 'px';
   myPinImg.src = adContents.author.avatar;
@@ -86,7 +92,7 @@ var generatePins = function (arrayAd) {
 var myFragment = generatePins(pinContents);
 
 var generateAdCard = function (pinContent) {
-  var templateAdCard = document.querySelector('template').content.querySelector('.map__card');
+  var templateAdCard = template.content.querySelector('.map__card');
   var adCard = templateAdCard.cloneNode(true);
 
   var adCardAvatar = adCard.querySelector('.popup__avatar');
@@ -106,20 +112,8 @@ var generateAdCard = function (pinContent) {
   adCardTitle.textContent = pinContent.offer.title;
   adCardAdress.textContent = pinContent.offer.address;
   adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
-  switch (pinContent.offer.type) {
-    case 'palace':
-      adCardType.textContent = 'Дворец';
-      break;
-    case 'flat':
-      adCardType.textContent = 'Квартира';
-      break;
-    case 'bungalo':
-      adCardType.textContent = 'Бунгало';
-      break;
-    case 'house':
-      adCardType.textContent = 'Дом';
-      break;
-  }
+  adCardType.textContent = AppartmentTypes[pinContent.offer.type];
+
   adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' + pinContent.offer.rooms + ' гостей';
   adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin + ' , выезд до ' + pinContent.offer.checkout;
   adCardFeatures.textContent = pinContent.offer.features;
@@ -132,7 +126,7 @@ var generateAdCard = function (pinContent) {
   return adCard;
 };
 
-var adCard = generateAdCard(pinContents[0]);
+var adCard = generateAdCard(pinContents[1]);
 
 document.querySelector('.map__pins').appendChild(myFragment);
 document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCard);
