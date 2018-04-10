@@ -22,20 +22,28 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var GENERATE_PINS = 8;
+
 var AppartmentTypes = {
   'palace': 'Дворец',
   'flat': 'Квартира',
   'bungalo': 'Бунгало',
   'house': 'Дом'
 };
-var GENERATE_PINS = 8;
+
 var template = document.querySelector('template');
+var templateAdCard = template.content.querySelector('.map__card');
+var adCard = templateAdCard.cloneNode(true);
+var adCardPhoto = adCard.querySelector('.popup__photos');
 
 document.querySelector('.map').classList.remove('map--faded');
 
-
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
+};
+
+var deleteFirstElement = function (parentElement, element) {
+  parentElement.querySelector(element).remove();
 };
 
 var generateAdContents = function () {
@@ -89,12 +97,36 @@ var generatePins = function (arrayAd) {
   }
   return fragmentPins;
 };
+
 var fragmentPins = generatePins(pinContents);
 
-var generateAdCard = function (pinContent) {
-  var templateAdCard = template.content.querySelector('.map__card');
-  var adCard = templateAdCard.cloneNode(true);
+var createAdPhotos = function (arrayAdPhotos) {
+  var adCardPhotosImg = adCardPhoto.querySelector('img');
+  var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+  adCardPhotosItems.src = arrayAdPhotos;
+  return adCardPhotosItems;
+};
 
+var generatedPhotos = function (arrayAdPhotos) {
+  var fragmentAdPhotos = document.createDocumentFragment();
+  for (var i = 0; i < arrayAdPhotos.length; i++) {
+    fragmentAdPhotos.appendChild(createAdPhotos(arrayAdPhotos[i]));
+  }
+  return fragmentAdPhotos;
+};
+
+var generateFeatures = function () {
+  var adCardFeatures = adCard.querySelector('.popup__features');
+  var newAdCardFeatures = adCardFeatures.cloneNode();
+  adCardFeatures.remove();
+  for (var i = 0; i < pinContents.offer.features.length; i++) {
+    var classModofication = pinContents.offer.features[i];
+    newAdCardFeatures.innerHTML += '<li class="popup__feature popup__feature--' + classModofication + '"></li>';
+  }
+  return newAdCardFeatures;
+};
+
+var generateAdCard = function (pinContent) {
   var adCardAvatar = adCard.querySelector('.popup__avatar');
   var adCardTitle = adCard.querySelector('.popup__title');
   var adCardAdress = adCard.querySelector('.popup__text--address');
@@ -110,42 +142,22 @@ var generateAdCard = function (pinContent) {
   adCardAdress.textContent = pinContent.offer.address;
   adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
   adCardType.textContent = AppartmentTypes[pinContent.offer.type];
-
   adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' + pinContent.offer.rooms + ' гостей';
   adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin + ' , выезд до ' + pinContent.offer.checkout;
-  adCardFeatures.textContent = pinContent.offer.features;
+
+  var newAdCardFeatures = generateFeatures();
+  adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
+
   adCardDescription.textContent = pinContent.offer.description;
 
-  var adCardPhoto = adCard.querySelector('.popup__photos');
-  var createAdPhotos = function (arrayAdPhotos) {
-    var adCardPhotosImg = adCardPhoto.querySelector('img');
-    var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
-    adCardPhotosItems.src = arrayAdPhotos;
-    return adCardPhotosItems;
-  };
-
-  var generatedPhotos = function (arrayAdPhotos) {
-    var fragmentAdPhotos = document.createDocumentFragment();
-    for (var i = 0; i < arrayAdPhotos.length; i++) {
-      fragmentAdPhotos.appendChild(createAdPhotos(arrayAdPhotos[i]));
-    }
-    return fragmentAdPhotos;
-  };
-
   var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
+  deleteFirstElement(adCardPhoto, 'img');
   adCardPhoto.appendChild(fragmentAdPhotos);
 
   return adCard;
 };
 
-var adCard = generateAdCard(pinContents[0]);
+var adCards = generateAdCard(pinContents[0]);
 
 document.querySelector('.map__pins').appendChild(fragmentPins);
-document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCard);
-
-
-// Перетасовка массива
-// Алгоритм Фишера Ейца
-
-// Функция которая будет генарить много пинов
-// Функция которая будет эти пины рендерить
+document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCards);
