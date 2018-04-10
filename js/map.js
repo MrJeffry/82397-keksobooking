@@ -39,9 +39,9 @@ var randomNumber = function (min, max) {
 };
 
 var generateAdContents = function () {
-  var addContents = [];
+  var adContents = [];
   for (var i = 0; i < GENERATE_PINS; i++) {
-    addContents[i] = {
+    adContents[i] = {
       'author': {
         'avatar': AVATARS[i]
       },
@@ -64,7 +64,7 @@ var generateAdContents = function () {
       }
     };
   }
-  return addContents;
+  return adContents;
 };
 
 var pinContents = generateAdContents();
@@ -83,13 +83,13 @@ var createPin = function (adContents) {
 };
 
 var generatePins = function (arrayAd) {
-  var myFragment = document.createDocumentFragment();
+  var fragmentPins = document.createDocumentFragment();
   for (var i = 0; i < arrayAd.length; i++) {
-    myFragment.appendChild(createPin(arrayAd[i]));
+    fragmentPins.appendChild(createPin(arrayAd[i]));
   }
-  return myFragment;
+  return fragmentPins;
 };
-var myFragment = generatePins(pinContents);
+var fragmentPins = generatePins(pinContents);
 
 var generateAdCard = function (pinContent) {
   var templateAdCard = template.content.querySelector('.map__card');
@@ -104,9 +104,6 @@ var generateAdCard = function (pinContent) {
   var adCardTimes = adCard.querySelector('.popup__text--time');
   var adCardFeatures = adCard.querySelector('.popup__features');
   var adCardDescription = adCard.querySelector('.popup__description');
-  var adCardPhotos = adCard.querySelector('.popup__photos');
-  var adCardPhotosImg = adCardPhotos.querySelector('img');
-  var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
 
   adCardAvatar.src = pinContent.author.avatar;
   adCardTitle.textContent = pinContent.offer.title;
@@ -119,17 +116,34 @@ var generateAdCard = function (pinContent) {
   adCardFeatures.textContent = pinContent.offer.features;
   adCardDescription.textContent = pinContent.offer.description;
 
-  for (var i = 0; i < pinContent.offer.photos.length; i++) {
-    adCardPhotosItems.src = pinContent.offer.photos[i];
-  }
-  adCardPhotos.appendChild(adCardPhotosItems);
+  var adCardPhoto = adCard.querySelector('.popup__photos');
+  var createAdPhotos = function (arrayAdPhotos) {
+    var adCardPhotosImg = adCardPhoto.querySelector('img');
+    var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    adCardPhotosItems.src = arrayAdPhotos;
+    return adCardPhotosItems;
+  };
+
+  var generatedPhotos = function (arrayAdPhotos) {
+    var fragmentAdPhotos = document.createDocumentFragment();
+    for (var i = 0; i < arrayAdPhotos.length; i++) {
+      fragmentAdPhotos.appendChild(createAdPhotos(arrayAdPhotos[i]));
+    }
+    return fragmentAdPhotos;
+  };
+
+  var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
+  adCardPhoto.appendChild(fragmentAdPhotos);
+
   return adCard;
 };
 
-var adCard = generateAdCard(pinContents[1]);
+var adCard = generateAdCard(pinContents[0]);
 
-document.querySelector('.map__pins').appendChild(myFragment);
+document.querySelector('.map__pins').appendChild(fragmentPins);
 document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCard);
+
+
 // Перетасовка массива
 // Алгоритм Фишера Ейца
 
