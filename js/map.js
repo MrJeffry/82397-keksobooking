@@ -15,7 +15,10 @@ var TITLES = [
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
-var FEAUTERES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var FEAUTERES = ['wifi', 'dishwasher', 'parking',
+  'washer', 'elevator', 'conditioner'
+];
+
 var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
@@ -115,13 +118,13 @@ var generatedPhotos = function (arrayAdPhotos) {
   return fragmentAdPhotos;
 };
 
-var generateFeatures = function () {
+var generateFeatures = function (arrayAdFeatures) {
   var adCardFeatures = adCard.querySelector('.popup__features');
   var newAdCardFeatures = adCardFeatures.cloneNode();
   adCardFeatures.remove();
-  for (var i = 0; i < pinContents.offer.features.length; i++) {
-    var classModofication = pinContents.offer.features[i];
-    newAdCardFeatures.innerHTML += '<li class="popup__feature popup__feature--' + classModofication + '"></li>';
+  for (var i = 0; i < arrayAdFeatures.length; i++) {
+    newAdCardFeatures.innerHTML +=
+    '<li class="popup__feature popup__feature--' + arrayAdFeatures[i] + '"></li>';
   }
   return newAdCardFeatures;
 };
@@ -134,7 +137,6 @@ var generateAdCard = function (pinContent) {
   var adCardType = adCard.querySelector('.popup__type');
   var adCardСapacity = adCard.querySelector('.popup__text--capacity');
   var adCardTimes = adCard.querySelector('.popup__text--time');
-  var adCardFeatures = adCard.querySelector('.popup__features');
   var adCardDescription = adCard.querySelector('.popup__description');
 
   adCardAvatar.src = pinContent.author.avatar;
@@ -142,14 +144,14 @@ var generateAdCard = function (pinContent) {
   adCardAdress.textContent = pinContent.offer.address;
   adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
   adCardType.textContent = AppartmentTypes[pinContent.offer.type];
-  adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' + pinContent.offer.rooms + ' гостей';
-  adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin + ' , выезд до ' + pinContent.offer.checkout;
+  adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
+    pinContent.offer.rooms + ' гостей';
+  adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
+    ' , выезд до ' + pinContent.offer.checkout;
 
-  var newAdCardFeatures = generateFeatures();
+  var newAdCardFeatures = generateFeatures(pinContent.offer.features);
   adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
-
   adCardDescription.textContent = pinContent.offer.description;
-
   var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
   deleteFirstElement(adCardPhoto, 'img');
   adCardPhoto.appendChild(fragmentAdPhotos);
