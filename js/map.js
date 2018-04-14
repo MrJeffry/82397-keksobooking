@@ -1,5 +1,9 @@
 'use strict';
 
+var GENERATE_PINS = 8;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+
 var AVATARS = [
   'img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png',
   'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png',
@@ -25,7 +29,6 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var GENERATE_PINS = 8;
 
 var AppartmentTypes = {
   'palace': 'Дворец',
@@ -97,8 +100,8 @@ var createPin = function (adContents) {
   var myPin = templatePin.cloneNode(true);
   var myPinImg = myPin.querySelector('img');
 
-  myPin.style.left = adContents.location.x - 25 + 'px';
-  myPin.style.top = adContents.location.y - 35 + 'px';
+  myPin.style.left = adContents.location.x - (PIN_WIDTH / 2) + 'px';
+  myPin.style.top = adContents.location.y - (PIN_HEIGHT / 2) + 'px';
   myPinImg.src = adContents.author.avatar;
   myPinImg.alt = adContents.offer.title;
 
