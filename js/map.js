@@ -29,7 +29,6 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-
 var AppartmentTypes = {
   'palace': 'Дворец',
   'flat': 'Квартира',
@@ -41,8 +40,6 @@ var template = document.querySelector('template');
 var templateAdCard = template.content.querySelector('.map__card');
 var adCard = templateAdCard.cloneNode(true);
 var adCardPhoto = adCard.querySelector('.popup__photos');
-
-document.querySelector('.map').classList.remove('map--faded');
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -60,8 +57,10 @@ var shufflesArray = function (array) {
   return array;
 };
 
-var deleteFirstElement = function (parentElement, element) {
-  parentElement.querySelector(element).remove();
+var deleteAllElements = function (parentElement, element) {
+  parentElement.querySelectorAll(element).forEach(function (currentElement) {
+    currentElement.remove();
+  });
 };
 
 var generateAdContents = function () {
@@ -78,8 +77,8 @@ var generateAdContents = function () {
         'type': TYPES[i],
         'rooms': randomNumber(1, 5),
         'guests': randomNumber(1, 5),
-        'checkin': CHECKINS[i],
-        'checkout': CHECKOUTS[i],
+        'checkin': CHECKINS[randomNumber(0, 2)],
+        'checkout': CHECKOUTS[randomNumber(0, 2)],
         'features': shufflesArray(FEAUTERES),
         'description': '',
         'photos': shufflesArray(PHOTOS)
@@ -168,13 +167,59 @@ var generateAdCard = function (pinContent) {
   adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
   adCardDescription.textContent = pinContent.offer.description;
   var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
-  deleteFirstElement(adCardPhoto, 'img');
+  deleteAllElements(adCardPhoto, 'img');
   adCardPhoto.appendChild(fragmentAdPhotos);
 
   return adCard;
 };
 
-var adCards = generateAdCard(pinContents[0]);
+var arrayForEach = function (array) {
+  var newArray = Array.prototype.slice.call(array);
+  return newArray;
+};
 
-document.querySelector('.map__pins').appendChild(fragmentPins);
-document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCards);
+var toggleDisabledInputs = function (array, inDisabled) {
+  var transformedArray = arrayForEach(array);
+  transformedArray.forEach(function (element) {
+    element.disabled = inDisabled;
+  });
+};
+
+var getAdCardsCoordinate = function () {
+  var adcardcoordinate = adCard.querySelector('.popup__text--address').textContent;
+  return adcardcoordinate;
+};
+
+var mapPinMain = document.querySelector('.map__pin--main');
+var form = document.querySelector('.ad-form');
+var inputs = form.querySelectorAll('fieldset');
+
+var addCoordinate = function () {
+  var inputAddres = form.querySelector('[name="address"]');
+  inputAddres.value = getAdCardsCoordinate();
+};
+
+var removeDisabledInputs = function () {
+  toggleDisabledInputs(inputs, false);
+  mapPinMain.removeEventListener('mouseup', mapPinMainMouseupHandler);
+  form.classList.remove('ad-form--disabled');
+};
+
+var mapPinMainMouseupHandler = function () {
+  document.querySelector('.map').classList.remove('map--faded');
+  document.querySelector('.map__pins').appendChild(fragmentPins);
+  removeDisabledInputs();
+  document.querySelectorAll('.map__pin').forEach(function (element, index) {
+    element.addEventListener('click', function () {
+      var adCards = generateAdCard(pinContents[index - 1]);
+      getAdCardsCoordinate();
+      addCoordinate();
+      document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCards);
+      return adCards;
+    });
+  });
+};
+
+addCoordinate();
+toggleDisabledInputs(inputs, true);
+mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
