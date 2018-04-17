@@ -36,6 +36,13 @@ var AppartmentTypes = {
   'house': 'Дом'
 };
 
+var AppartmentPrice = {
+  'palace': 10000,
+  'flat': 1000,
+  'bungalo': 0,
+  'house': 5000
+};
+
 var template = document.querySelector('template');
 var templateAdCard = template.content.querySelector('.map__card');
 var adCard = templateAdCard.cloneNode(true);
@@ -223,3 +230,23 @@ var mapPinMainMouseupHandler = function () {
 addCoordinate();
 toggleDisabledInputs(inputs, true);
 mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
+
+var formValidate = function () {
+  var selectType = form.querySelector('[name="type"]');
+  selectType.addEventListener('focus', selectTypeChangeHadler);
+  selectType.addEventListener('blur', function () {
+    selectType.removeEventListener('focus', selectTypeChangeHadler);
+  });
+
+};
+
+var selectTypeChangeHadler = function () {
+  var selectType = form.querySelector('[name="type"]');
+  var labelType = form.querySelector('[name="price"]');
+  selectType.addEventListener('change', function () {
+    labelType.placeholder = AppartmentPrice[selectType.value];
+    labelType.min = AppartmentPrice[selectType.value];
+  });
+};
+
+formValidate();
