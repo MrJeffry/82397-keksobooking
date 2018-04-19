@@ -193,7 +193,9 @@ var generateFeatures = function (arrayAdFeatures) {
   var adCardFeatures = adCard.querySelector('.popup__features');
   var newAdCardFeatures = adCardFeatures.cloneNode();
   adCardFeatures.remove();
-  for (var i = 0; i < arrayAdFeatures.length; i++) {
+  shufflesArray(arrayAdFeatures);
+  var randomArrayAdFeaturesLength = randomNumber(1, arrayAdFeatures.length);
+  for (var i = 0; i < randomArrayAdFeaturesLength; i++) {
     newAdCardFeatures.innerHTML +=
       '<li class="popup__feature popup__feature--' + arrayAdFeatures[i] + '"></li>';
   }
