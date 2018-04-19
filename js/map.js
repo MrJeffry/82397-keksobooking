@@ -118,6 +118,46 @@ var selectTypeChangeHandler = function () {
   });
 };
 
+var formSubmitByttonClickHandler = function () {
+  var selectRooms = form.querySelector('[name="rooms"]');
+  var selectPlace = form.querySelector('[name="capacity"]');
+
+  switch (selectRooms.value) {
+    case '1':
+      if (selectPlace.value !== '1') {
+        selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
+      } else {
+        selectPlace.setCustomValidity('');
+        form.submit();
+      }
+      break;
+    case '2':
+      if (selectPlace.value !== '1' && selectPlace.value !== '2') {
+        selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
+      } else {
+        selectPlace.setCustomValidity('');
+        form.submit();
+      }
+      break;
+    case '3':
+      if (selectPlace.value !== '1' && selectPlace.value !== '2' && selectPlace.value !== '3') {
+        selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+      } else {
+        selectPlace.setCustomValidity('');
+        form.submit();
+      }
+      break;
+    case '100':
+      if (selectPlace.value !== '0') {
+        selectPlace.setCustomValidity('100 комнат — «не для гостей»');
+      } else {
+        selectPlace.setCustomValidity('');
+        form.submit();
+      }
+      break;
+  }
+};
+
 var generateAdContents = function () {
   var adContents = [];
   for (var i = 0; i < GENERATE_PINS; i++) {
@@ -270,6 +310,8 @@ var formValidate = function () {
   selectType.addEventListener('blur', function () {
     selectType.removeEventListener('focus', selectTypeChangeHandler);
   });
+  var submitFormButton = form.querySelector('[type="submit"]');
+  submitFormButton.addEventListener('click', formSubmitByttonClickHandler);
 };
 
 formValidate();
