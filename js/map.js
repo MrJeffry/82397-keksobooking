@@ -50,6 +50,12 @@ var templateAdCard = template.content.querySelector('.map__card');
 var adCard = templateAdCard.cloneNode(true);
 var adCardPhoto = adCard.querySelector('.popup__photos');
 var buttonPopupClose = adCard.querySelector('.popup__close');
+var mapSection = document.querySelector('.map');
+var mapPins = mapSection.querySelector('.map__pins');
+var mapPinMain = mapSection.querySelector('.map__pin--main');
+var form = document.querySelector('.ad-form');
+var inputs = form.querySelectorAll('fieldset');
+var mapFiltersContainer = mapSection.querySelector('.map__filters-container');
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -75,6 +81,41 @@ var deleteAllElements = function (parentElement, element) {
 
 var convertNodeListToArray = function (array) {
   return Array.prototype.slice.call(array);
+};
+
+var mapPinClickHandelr = function (evt) {
+  var mapPin = mapPins.querySelectorAll('.map__pin');
+  var currentTargetIndex = convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
+  mapFiltersContainer.insertAdjacentElement('beforeBegin', generateAdCard(pinContents[currentTargetIndex - 1]));
+};
+
+var mapPinMainMouseupHandler = function () {
+  mapSection.classList.remove('map--faded');
+  removeDisabledInputs();
+  mapPins.appendChild(fragmentPins);
+};
+
+var closeButtonPopupClickHandler = function () {
+  adCard.remove();
+  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
+  document.removeEventListener('keydown', popupPressEscKeyHandler);
+};
+
+var popupPressEscKeyHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    adCard.remove();
+  }
+  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
+  document.removeEventListener('keydown', popupPressEscKeyHandler);
+};
+
+var selectTypeChangeHandler = function () {
+  var selectType = form.querySelector('[name="type"]');
+  var labelType = form.querySelector('[name="price"]');
+  selectType.addEventListener('change', function () {
+    labelType.placeholder = AppartmentPrice[selectType.value];
+    labelType.min = AppartmentPrice[selectType.value];
+  });
 };
 
 var generateAdContents = function () {
@@ -117,6 +158,8 @@ var createPin = function (adContents) {
   myPin.style.top = adContents.location.y - (PIN_HEIGHT / 2) + 'px';
   myPinImg.src = adContents.author.avatar;
   myPinImg.alt = adContents.offer.title;
+
+  myPin.addEventListener('click', mapPinClickHandelr);
 
   return myPin;
 };
@@ -181,27 +224,15 @@ var generateAdCard = function (pinContent) {
   adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
   adCardDescription.textContent = pinContent.offer.description;
   var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
+
   deleteAllElements(adCardPhoto, 'img');
+
   adCardPhoto.appendChild(fragmentAdPhotos);
 
   buttonPopupClose.addEventListener('click', closeButtonPopupClickHandler);
   document.addEventListener('keydown', popupPressEscKeyHandler);
 
   return adCard;
-};
-
-var closeButtonPopupClickHandler = function () {
-  adCard.remove();
-  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
-  document.removeEventListener('keydown', popupPressEscKeyHandler);
-};
-
-var popupPressEscKeyHandler = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    adCard.remove();
-  }
-  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
-  document.removeEventListener('keydown', popupPressEscKeyHandler);
 };
 
 var toggleDisabledInputs = function (array, inDisabled) {
@@ -216,16 +247,10 @@ var getMainPinCoordinate = function () {
   return parseInt(mainPin.style.left, 10) + ',' + parseInt(mainPin.style.top, 10);
 };
 
-
-var mapPinMain = document.querySelector('.map__pin--main');
-var form = document.querySelector('.ad-form');
-var inputs = form.querySelectorAll('fieldset');
-
 var addCoordinate = function () {
   var inputAddres = form.querySelector('[name="address"]');
   inputAddres.value = getMainPinCoordinate();
 };
-
 
 var removeDisabledInputs = function () {
   toggleDisabledInputs(inputs, false);
@@ -233,38 +258,16 @@ var removeDisabledInputs = function () {
   form.classList.remove('ad-form--disabled');
 };
 
-var mapPinMainMouseupHandler = function () {
-  document.querySelector('.map').classList.remove('map--faded');
-  document.querySelector('.map__pins').appendChild(fragmentPins);
-  removeDisabledInputs();
-  document.querySelectorAll('.map__pin').forEach(function (element, index) {
-    element.addEventListener('click', function () {
-      var adCards = generateAdCard(pinContents[index - 1]);
-      document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCards);
-    });
-  });
-};
-
 toggleDisabledInputs(inputs, true);
 mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
 
 var formValidate = function () {
+  addCoordinate();
   var selectType = form.querySelector('[name="type"]');
-  selectType.addEventListener('focus', selectTypeChangeHadler);
+  selectType.addEventListener('focus', selectTypeChangeHandler);
   selectType.addEventListener('blur', function () {
-    selectType.removeEventListener('focus', selectTypeChangeHadler);
-  });
-
-};
-
-var selectTypeChangeHadler = function () {
-  var selectType = form.querySelector('[name="type"]');
-  var labelType = form.querySelector('[name="price"]');
-  selectType.addEventListener('change', function () {
-    labelType.placeholder = AppartmentPrice[selectType.value];
-    labelType.min = AppartmentPrice[selectType.value];
+    selectType.removeEventListener('focus', selectTypeChangeHandler);
   });
 };
 
-addCoordinate();
 formValidate();
