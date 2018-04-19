@@ -4,6 +4,8 @@ var GENERATE_PINS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 
+var ESC_KEYCODE = 27;
+
 var AVATARS = [
   'img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png',
   'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png',
@@ -47,6 +49,7 @@ var template = document.querySelector('template');
 var templateAdCard = template.content.querySelector('.map__card');
 var adCard = templateAdCard.cloneNode(true);
 var adCardPhoto = adCard.querySelector('.popup__photos');
+var buttonPopupClose = adCard.querySelector('.popup__close');
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -68,6 +71,10 @@ var deleteAllElements = function (parentElement, element) {
   parentElement.querySelectorAll(element).forEach(function (currentElement) {
     currentElement.remove();
   });
+};
+
+var convertNodeListToArray = function (array) {
+  return Array.prototype.slice.call(array);
 };
 
 var generateAdContents = function () {
@@ -145,7 +152,7 @@ var generateFeatures = function (arrayAdFeatures) {
   adCardFeatures.remove();
   for (var i = 0; i < arrayAdFeatures.length; i++) {
     newAdCardFeatures.innerHTML +=
-    '<li class="popup__feature popup__feature--' + arrayAdFeatures[i] + '"></li>';
+      '<li class="popup__feature popup__feature--' + arrayAdFeatures[i] + '"></li>';
   }
   return newAdCardFeatures;
 };
@@ -177,25 +184,38 @@ var generateAdCard = function (pinContent) {
   deleteAllElements(adCardPhoto, 'img');
   adCardPhoto.appendChild(fragmentAdPhotos);
 
+  buttonPopupClose.addEventListener('click', closeButtonPopupClickHandler);
+  document.addEventListener('keydown', popupPressEscKeyHandler);
+
   return adCard;
 };
 
-var arrayForEach = function (array) {
-  var newArray = Array.prototype.slice.call(array);
-  return newArray;
+var closeButtonPopupClickHandler = function () {
+  adCard.remove();
+  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
+  document.removeEventListener('keydown', popupPressEscKeyHandler);
+};
+
+var popupPressEscKeyHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    adCard.remove();
+  }
+  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
+  document.removeEventListener('keydown', popupPressEscKeyHandler);
 };
 
 var toggleDisabledInputs = function (array, inDisabled) {
-  var transformedArray = arrayForEach(array);
+  var transformedArray = convertNodeListToArray(array);
   transformedArray.forEach(function (element) {
     element.disabled = inDisabled;
   });
 };
 
-var getAdCardsCoordinate = function () {
-  var adcardcoordinate = adCard.querySelector('.popup__text--address').textContent;
-  return adcardcoordinate;
+var getMainPinCoordinate = function () {
+  var mainPin = document.querySelector('.map__pin--main');
+  return parseInt(mainPin.style.left, 10) + ',' + parseInt(mainPin.style.top, 10);
 };
+
 
 var mapPinMain = document.querySelector('.map__pin--main');
 var form = document.querySelector('.ad-form');
@@ -203,8 +223,9 @@ var inputs = form.querySelectorAll('fieldset');
 
 var addCoordinate = function () {
   var inputAddres = form.querySelector('[name="address"]');
-  inputAddres.value = getAdCardsCoordinate();
+  inputAddres.value = getMainPinCoordinate();
 };
+
 
 var removeDisabledInputs = function () {
   toggleDisabledInputs(inputs, false);
@@ -219,15 +240,11 @@ var mapPinMainMouseupHandler = function () {
   document.querySelectorAll('.map__pin').forEach(function (element, index) {
     element.addEventListener('click', function () {
       var adCards = generateAdCard(pinContents[index - 1]);
-      getAdCardsCoordinate();
-      addCoordinate();
       document.querySelector('.map__filters-container').insertAdjacentElement('beforeBegin', adCards);
-      return adCards;
     });
   });
 };
 
-addCoordinate();
 toggleDisabledInputs(inputs, true);
 mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
 
@@ -249,4 +266,5 @@ var selectTypeChangeHadler = function () {
   });
 };
 
+addCoordinate();
 formValidate();
