@@ -3,8 +3,10 @@
 var GENERATE_PINS = 8;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
-
-var ESC_KEYCODE = 27;
+var KEYCODES = {
+  escape: 27,
+  enter: 13
+};
 
 var AVATARS = [
   'img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png',
@@ -53,8 +55,8 @@ var buttonPopupClose = adCard.querySelector('.popup__close');
 var mapSection = document.querySelector('.map');
 var mapPins = mapSection.querySelector('.map__pins');
 var mapPinMain = mapSection.querySelector('.map__pin--main');
-var form = document.querySelector('.ad-form');
-var inputs = form.querySelectorAll('fieldset');
+var Adform = document.querySelector('.ad-form');
+var inputs = Adform.querySelectorAll('fieldset');
 var mapFiltersContainer = mapSection.querySelector('.map__filters-container');
 
 var randomNumber = function (min, max) {
@@ -83,7 +85,13 @@ var convertNodeListToArray = function (array) {
   return Array.prototype.slice.call(array);
 };
 
-var mapPinClickHandelr = function (evt) {
+var removePopupHandlers = function () {
+  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
+  buttonPopupClose.removeEventListener('keydown', popupPressEnterKeyHandler);
+  document.removeEventListener('keydown', popupPressEscKeyHandler);
+};
+
+var mapPinClickHandler = function (evt) {
   var mapPin = mapPins.querySelectorAll('.map__pin');
   var currentTargetIndex = convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
   mapFiltersContainer.insertAdjacentElement('beforeBegin', generateAdCard(pinContents[currentTargetIndex - 1]));
@@ -98,29 +106,36 @@ var mapPinMainMouseupHandler = function () {
 var closeButtonPopupClickHandler = function () {
   adCard.remove();
   buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
+  buttonPopupClose.removeEventListener('keydown', popupPressEnterKeyHandler);
   document.removeEventListener('keydown', popupPressEscKeyHandler);
 };
 
 var popupPressEscKeyHandler = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === KEYCODES.escape) {
     adCard.remove();
+    removePopupHandlers();
   }
-  buttonPopupClose.removeEventListener('click', closeButtonPopupClickHandler);
-  document.removeEventListener('keydown', popupPressEscKeyHandler);
+};
+
+var popupPressEnterKeyHandler = function (evt) {
+  if (evt.keyCode === KEYCODES.enter) {
+    adCard.remove();
+    removePopupHandlers();
+  }
 };
 
 var selectTypeChangeHandler = function () {
-  var selectType = form.querySelector('[name="type"]');
-  var labelType = form.querySelector('[name="price"]');
+  var selectType = Adform.querySelector('[name="type"]');
+  var labelType = Adform.querySelector('[name="price"]');
   selectType.addEventListener('change', function () {
     labelType.placeholder = AppartmentPrice[selectType.value];
     labelType.min = AppartmentPrice[selectType.value];
   });
 };
 
-var formSubmitByttonClickHandler = function () {
-  var selectRooms = form.querySelector('[name="rooms"]');
-  var selectPlace = form.querySelector('[name="capacity"]');
+var formSubmitButtonClickHandler = function () {
+  var selectRooms = Adform.querySelector('[name="rooms"]');
+  var selectPlace = Adform.querySelector('[name="capacity"]');
 
   switch (selectRooms.value) {
     case '1':
@@ -128,7 +143,7 @@ var formSubmitByttonClickHandler = function () {
         selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
       } else {
         selectPlace.setCustomValidity('');
-        form.submit();
+        Adform.submit();
       }
       break;
     case '2':
@@ -136,7 +151,7 @@ var formSubmitByttonClickHandler = function () {
         selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
       } else {
         selectPlace.setCustomValidity('');
-        form.submit();
+        Adform.submit();
       }
       break;
     case '3':
@@ -144,7 +159,7 @@ var formSubmitByttonClickHandler = function () {
         selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
       } else {
         selectPlace.setCustomValidity('');
-        form.submit();
+        Adform.submit();
       }
       break;
     case '100':
@@ -152,7 +167,7 @@ var formSubmitByttonClickHandler = function () {
         selectPlace.setCustomValidity('100 комнат — «не для гостей»');
       } else {
         selectPlace.setCustomValidity('');
-        form.submit();
+        Adform.submit();
       }
       break;
   }
@@ -199,7 +214,7 @@ var createPin = function (adContents) {
   myPinImg.src = adContents.author.avatar;
   myPinImg.alt = adContents.offer.title;
 
-  myPin.addEventListener('click', mapPinClickHandelr);
+  myPin.addEventListener('click', mapPinClickHandler);
 
   return myPin;
 };
@@ -261,6 +276,7 @@ var generateAdCard = function (pinContent) {
     pinContent.offer.rooms + ' гостей';
   adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
     ' , выезд до ' + pinContent.offer.checkout;
+  buttonPopupClose.tabIndex = '0';
 
   var newAdCardFeatures = generateFeatures(pinContent.offer.features);
   adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
@@ -273,6 +289,7 @@ var generateAdCard = function (pinContent) {
 
   buttonPopupClose.addEventListener('click', closeButtonPopupClickHandler);
   document.addEventListener('keydown', popupPressEscKeyHandler);
+  document.addEventListener('keydown', popupPressEnterKeyHandler);
 
   return adCard;
 };
@@ -281,6 +298,9 @@ var toggleDisabledInputs = function (array, inDisabled) {
   var transformedArray = convertNodeListToArray(array);
   transformedArray.forEach(function (element) {
     element.disabled = inDisabled;
+    if (inDisabled === false && element.children[1].id === 'address') {
+      element.children[1].readOnly = true;
+    }
   });
 };
 
@@ -290,28 +310,33 @@ var getMainPinCoordinate = function () {
 };
 
 var addCoordinate = function () {
-  var inputAddres = form.querySelector('[name="address"]');
+  var inputAddres = Adform.querySelector('[name="address"]');
   inputAddres.value = getMainPinCoordinate();
 };
 
 var removeDisabledInputs = function () {
   toggleDisabledInputs(inputs, false);
   mapPinMain.removeEventListener('mouseup', mapPinMainMouseupHandler);
-  form.classList.remove('ad-form--disabled');
+  Adform.classList.remove('ad-form--disabled');
 };
 
 toggleDisabledInputs(inputs, true);
 mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
 
 var formValidate = function () {
-  addCoordinate();
-  var selectType = form.querySelector('[name="type"]');
+  var selectType = Adform.querySelector('[name="type"]');
   selectType.addEventListener('focus', selectTypeChangeHandler);
   selectType.addEventListener('blur', function () {
     selectType.removeEventListener('focus', selectTypeChangeHandler);
   });
-  var submitFormButton = form.querySelector('[type="submit"]');
-  submitFormButton.addEventListener('click', formSubmitByttonClickHandler);
+  var submitFormButton = Adform.querySelector('[type="submit"]');
+  submitFormButton.addEventListener('click', formSubmitButtonClickHandler);
 };
 
+addCoordinate();
 formValidate();
+
+/*
+1.Добавить валидацию пункта 2.5
+2.Отрефакторить валидацию
+*/
