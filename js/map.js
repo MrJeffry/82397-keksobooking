@@ -58,6 +58,8 @@ var mapPinMain = mapSection.querySelector('.map__pin--main');
 var Adform = document.querySelector('.ad-form');
 var inputs = Adform.querySelectorAll('fieldset');
 var mapFiltersContainer = mapSection.querySelector('.map__filters-container');
+var selectRooms = Adform.querySelector('[name="rooms"]');
+var selectPlace = Adform.querySelector('[name="capacity"]');
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -133,44 +135,23 @@ var selectTypeChangeHandler = function () {
   });
 };
 
-var formSubmitButtonClickHandler = function () {
-  var selectRooms = Adform.querySelector('[name="rooms"]');
-  var selectPlace = Adform.querySelector('[name="capacity"]');
-
-  switch (selectRooms.value) {
-    case '1':
-      if (selectPlace.value !== '1') {
-        selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
-      } else {
-        selectPlace.setCustomValidity('');
-        Adform.submit();
-      }
-      break;
-    case '2':
-      if (selectPlace.value !== '1' && selectPlace.value !== '2') {
-        selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
-      } else {
-        selectPlace.setCustomValidity('');
-        Adform.submit();
-      }
-      break;
-    case '3':
-      if (selectPlace.value !== '1' && selectPlace.value !== '2' && selectPlace.value !== '3') {
-        selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
-      } else {
-        selectPlace.setCustomValidity('');
-        Adform.submit();
-      }
-      break;
-    case '100':
-      if (selectPlace.value !== '0') {
-        selectPlace.setCustomValidity('100 комнат — «не для гостей»');
-      } else {
-        selectPlace.setCustomValidity('');
-        Adform.submit();
-      }
-      break;
+var vialidateRoomsSelect = function (rooms, capacity) {
+  if (rooms === '1' && capacity !== '1') {
+    selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
+  } else if (rooms === '2' && capacity !== '1' && capacity !== '2') {
+    selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
+  } else if (rooms === '3' && capacity === '0') {
+    selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+  } else if (rooms === '100' && capacity !== '0') {
+    selectPlace.setCustomValidity('«не для гостей»');
+  } else {
+    Adform.submit();
+    selectPlace.setCustomValidity('');
   }
+};
+
+var formSubmitButtonClickHandler = function () {
+  vialidateRoomsSelect(selectRooms.value, selectPlace.value);
 };
 
 var generateAdContents = function () {
@@ -338,5 +319,5 @@ formValidate();
 
 /*
 1.Добавить валидацию пункта 2.5
-2.Отрефакторить валидацию
+3.Заменить числовые валью в селектах на буквенные
 */
