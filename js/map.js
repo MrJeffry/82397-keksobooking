@@ -47,6 +47,20 @@ var AppartmentPrice = {
   'house': 5000
 };
 
+var appartamentGuests = {
+  'oneGuest': '1',
+  'twoGuests': '2',
+  'threeGuests': '3',
+  'notGuests': '0'
+};
+
+var appartamentRooms = {
+  'oneRoom': '1',
+  'twoRooms': '2',
+  'threeRooms': '3',
+  'hundredRooms': '100'
+};
+
 var template = document.querySelector('template');
 var templateAdCard = template.content.querySelector('.map__card');
 var adCard = templateAdCard.cloneNode(true);
@@ -55,11 +69,11 @@ var buttonPopupClose = adCard.querySelector('.popup__close');
 var mapSection = document.querySelector('.map');
 var mapPins = mapSection.querySelector('.map__pins');
 var mapPinMain = mapSection.querySelector('.map__pin--main');
-var Adform = document.querySelector('.ad-form');
-var inputs = Adform.querySelectorAll('fieldset');
+var AdForm = document.querySelector('.ad-form');
+var inputs = AdForm.querySelectorAll('fieldset');
 var mapFiltersContainer = mapSection.querySelector('.map__filters-container');
-var selectRooms = Adform.querySelector('[name="rooms"]');
-var selectPlace = Adform.querySelector('[name="capacity"]');
+var selectRooms = AdForm.querySelector('[name="rooms"]');
+var selectPlace = AdForm.querySelector('[name="capacity"]');
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -127,8 +141,8 @@ var popupPressEnterKeyHandler = function (evt) {
 };
 
 var selectTypeChangeHandler = function () {
-  var selectType = Adform.querySelector('[name="type"]');
-  var labelType = Adform.querySelector('[name="price"]');
+  var selectType = AdForm.querySelector('[name="type"]');
+  var labelType = AdForm.querySelector('[name="price"]');
   selectType.addEventListener('change', function () {
     labelType.placeholder = AppartmentPrice[selectType.value];
     labelType.min = AppartmentPrice[selectType.value];
@@ -136,22 +150,33 @@ var selectTypeChangeHandler = function () {
 };
 
 var vialidateRoomsSelect = function (rooms, capacity) {
-  if (rooms === '1' && capacity !== '1') {
+  if (rooms === appartamentRooms.oneRoom && capacity !== appartamentGuests.oneGuest) {
     selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
-  } else if (rooms === '2' && capacity !== '1' && capacity !== '2') {
+  } else if (rooms === appartamentRooms.twoRooms && capacity !== appartamentGuests.oneGuest && capacity !== appartamentGuests.twoGuests) {
     selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
-  } else if (rooms === '3' && capacity === '0') {
+  } else if (rooms === appartamentRooms.threeRooms && capacity === appartamentGuests.notGuests) {
     selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
-  } else if (rooms === '100' && capacity !== '0') {
+  } else if (rooms === appartamentRooms.hundredRooms && capacity !== appartamentGuests.notGuests) {
     selectPlace.setCustomValidity('«не для гостей»');
   } else {
-    Adform.submit();
     selectPlace.setCustomValidity('');
+  }
+};
+
+var viladateTimeAccommodation = function () {
+  var selectTimeIn = AdForm.querySelector('[name="timein"]');
+  var selectTimeOut = AdForm.querySelector('[name="timeout"]');
+
+  if (selectTimeIn.value !== selectTimeOut.value) {
+    selectTimeIn.setCustomValidity('Время заезда  и время выезда должно совпадать');
+  } else {
+    selectTimeIn.setCustomValidity('');
   }
 };
 
 var formSubmitButtonClickHandler = function () {
   vialidateRoomsSelect(selectRooms.value, selectPlace.value);
+  viladateTimeAccommodation();
 };
 
 var generateAdContents = function () {
@@ -291,33 +316,29 @@ var getMainPinCoordinate = function () {
 };
 
 var addCoordinate = function () {
-  var inputAddres = Adform.querySelector('[name="address"]');
+  var inputAddres = AdForm.querySelector('[name="address"]');
   inputAddres.value = getMainPinCoordinate();
 };
 
 var removeDisabledInputs = function () {
   toggleDisabledInputs(inputs, false);
   mapPinMain.removeEventListener('mouseup', mapPinMainMouseupHandler);
-  Adform.classList.remove('ad-form--disabled');
+  AdForm.classList.remove('ad-form--disabled');
 };
 
 toggleDisabledInputs(inputs, true);
 mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
 
 var formValidate = function () {
-  var selectType = Adform.querySelector('[name="type"]');
+  var selectType = AdForm.querySelector('[name="type"]');
+  var submitFormButton = AdForm.querySelector('[type="submit"]');
+
   selectType.addEventListener('focus', selectTypeChangeHandler);
   selectType.addEventListener('blur', function () {
     selectType.removeEventListener('focus', selectTypeChangeHandler);
   });
-  var submitFormButton = Adform.querySelector('[type="submit"]');
   submitFormButton.addEventListener('click', formSubmitButtonClickHandler);
 };
 
 addCoordinate();
 formValidate();
-
-/*
-1.Добавить валидацию пункта 2.5
-3.Заменить числовые валью в селектах на буквенные
-*/
