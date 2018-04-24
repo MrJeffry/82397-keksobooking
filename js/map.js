@@ -47,14 +47,14 @@ var AppartmentPrice = {
   'house': 5000
 };
 
-var appartamentGuests = {
+var AppartamentGuests = {
   'oneGuest': '1',
   'twoGuests': '2',
   'threeGuests': '3',
   'notGuests': '0'
 };
 
-var appartamentRooms = {
+var AppartamentRooms = {
   'oneRoom': '1',
   'twoRooms': '2',
   'threeRooms': '3',
@@ -74,6 +74,8 @@ var inputs = AdForm.querySelectorAll('fieldset');
 var mapFiltersContainer = mapSection.querySelector('.map__filters-container');
 var selectRooms = AdForm.querySelector('[name="rooms"]');
 var selectPlace = AdForm.querySelector('[name="capacity"]');
+var selectsTimeAccommodation = AdForm.querySelector('.ad-form__element--time');
+
 
 var randomNumber = function (min, max) {
   return Math.floor(min + (Math.random()) * (max - min));
@@ -113,11 +115,50 @@ var mapPinClickHandler = function (evt) {
   mapFiltersContainer.insertAdjacentElement('beforeBegin', generateAdCard(pinContents[currentTargetIndex - 1]));
 };
 
-var mapPinMainMouseupHandler = function () {
-  mapSection.classList.remove('map--faded');
-  removeDisabledInputs();
-  mapPins.appendChild(fragmentPins);
+var mapPinMainMousedownHandler = function (evt) {
+
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mapPinMainMousemoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x + 'px');
+    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y + 'px');
+
+    addCoordinate();
+
+    if (mapPinMain.offsetTop - shift.y < 149 || mapPinMain.offsetTop - shift.y > 499) {
+      mapPinMain.removeEventListener('mousemove', mapPinMainMousemoveHandler);
+    }
+
+  };
+
+  var mapPinMainMouseupHandler = function () {
+    mapPinMain.removeEventListener('mousemove', mapPinMainMousemoveHandler);
+    mapSection.classList.remove('map--faded');
+    removeDisabledInputs();
+    mapPins.appendChild(fragmentPins);
+  };
+
+  mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
+  mapPinMain.addEventListener('mousemove', mapPinMainMousemoveHandler);
 };
+
+mapPinMain.addEventListener('mousedown', mapPinMainMousedownHandler);
 
 var closeButtonPopupClickHandler = function () {
   adCard.remove();
@@ -150,33 +191,29 @@ var selectTypeChangeHandler = function () {
 };
 
 var vialidateRoomsSelect = function (rooms, capacity) {
-  if (rooms === appartamentRooms.oneRoom && capacity !== appartamentGuests.oneGuest) {
+  if (rooms === AppartamentRooms.oneRoom && capacity !== AppartamentGuests.oneGuest) {
     selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
-  } else if (rooms === appartamentRooms.twoRooms && capacity !== appartamentGuests.oneGuest && capacity !== appartamentGuests.twoGuests) {
+  } else if (rooms === AppartamentRooms.twoRooms && capacity !== AppartamentGuests.oneGuest && capacity !== AppartamentGuests.twoGuests) {
     selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
-  } else if (rooms === appartamentRooms.threeRooms && capacity === appartamentGuests.notGuests) {
+  } else if (rooms === AppartamentRooms.threeRooms && capacity === AppartamentGuests.notGuests) {
     selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
-  } else if (rooms === appartamentRooms.hundredRooms && capacity !== appartamentGuests.notGuests) {
+  } else if (rooms === AppartamentRooms.hundredRooms && capacity !== AppartamentGuests.notGuests) {
     selectPlace.setCustomValidity('«не для гостей»');
   } else {
     selectPlace.setCustomValidity('');
   }
 };
 
-var viladateTimeAccommodation = function () {
-  var selectTimeIn = AdForm.querySelector('[name="timein"]');
-  var selectTimeOut = AdForm.querySelector('[name="timeout"]');
-
-  if (selectTimeIn.value !== selectTimeOut.value) {
-    selectTimeIn.setCustomValidity('Время заезда  и время выезда должно совпадать');
+var selectsTimeAccommodationChangeHandler = function (evt) {
+  if (evt.target.nextElementSibling) {
+    evt.target.nextElementSibling.value = evt.target.value;
   } else {
-    selectTimeIn.setCustomValidity('');
+    evt.target.previousElementSibling.value = evt.target.value;
   }
 };
 
 var formSubmitButtonClickHandler = function () {
   vialidateRoomsSelect(selectRooms.value, selectPlace.value);
-  viladateTimeAccommodation();
 };
 
 var generateAdContents = function () {
@@ -322,12 +359,11 @@ var addCoordinate = function () {
 
 var removeDisabledInputs = function () {
   toggleDisabledInputs(inputs, false);
-  mapPinMain.removeEventListener('mouseup', mapPinMainMouseupHandler);
+  // mapPinMain.removeEventListener('mousedown', mapPinMainMousedownHandler);
   AdForm.classList.remove('ad-form--disabled');
 };
 
 toggleDisabledInputs(inputs, true);
-mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
 
 var formValidate = function () {
   var selectType = AdForm.querySelector('[name="type"]');
@@ -337,6 +373,7 @@ var formValidate = function () {
   selectType.addEventListener('blur', function () {
     selectType.removeEventListener('focus', selectTypeChangeHandler);
   });
+  selectsTimeAccommodation.addEventListener('change', selectsTimeAccommodationChangeHandler);
   submitFormButton.addEventListener('click', formSubmitButtonClickHandler);
 };
 
