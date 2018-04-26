@@ -4,10 +4,10 @@ window.pin = (function () {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
 
-  var mapPins = window.util.mapSection.querySelector('.map__pins');
   var mapFiltersContainer = window.util.mapSection.querySelector('.map__filters-container');
 
   var pinContents = window.data.generateAdContents();
+  var mapPins = window.util.mapSection.querySelector('.map__pins');
 
   var mapPinClickHandler = function (evt) {
     var mapPin = mapPins.querySelectorAll('.map__pin');
@@ -38,9 +38,8 @@ window.pin = (function () {
     return fragmentPins;
   };
 
-  var fragmentPins = generatePins(pinContents);
-
-  mapPins.appendChild(fragmentPins);
-
+  return {
+    fragmentPins: generatePins(pinContents)
+  };
 
 })();

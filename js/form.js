@@ -23,6 +23,7 @@ window.form = (function () {
     'hundredRooms': '100'
   };
 
+  var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
   var inputs = window.util.adForm.querySelectorAll('fieldset');
   var selectRooms = window.util.adForm.querySelector('[name="rooms"]');
   var selectPlace = window.util.adForm.querySelector('[name="capacity"]');
@@ -81,7 +82,6 @@ window.form = (function () {
   var removeDisabledInputs = function () {
     toggleDisabledInputs(inputs, false);
     window.util.adForm.classList.remove('ad-form--disabled');
-    mapPinMain.removeEventListener('mousedown', mapPinMainMousedownHandler);
   };
 
   toggleDisabledInputs(inputs, true);
