@@ -2,6 +2,10 @@
 
 window.util = (function () {
   return {
+    KEYCODES: {
+      escape: 27,
+      enter: 13
+    },
     shufflesArray: function (array) {
       var randomNumbers = [];
       var hashArray = [];
@@ -26,6 +30,6 @@ window.util = (function () {
     },
     mapSection: document.querySelector('.map'),
     template: document.querySelector('template'),
-    AdForm: document.querySelector('.ad-form')
+    adForm: document.querySelector('.ad-form')
   };
 })();
