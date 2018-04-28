@@ -1,6 +1,6 @@
 'use strict';
 
-window.data = (function () {
+(function () {
 
   var AVATARS = [
     'img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png',
@@ -29,34 +29,36 @@ window.data = (function () {
 
   var GENERATE_PINS = 8;
 
-  return {
-    generateAdContents: function () {
-      var adContents = [];
-      for (var i = 0; i < GENERATE_PINS; i++) {
-        adContents[i] = {
-          'author': {
-            'avatar': AVATARS[i]
-          },
-          'offer': {
-            'title': TITLES[i],
-            'address': [window.util.randomNumber(300, 900), window.util.randomNumber(150, 500)],
-            'price': window.util.randomNumber(1000, 1000000),
-            'type': TYPES[i],
-            'rooms': window.util.randomNumber(1, 5),
-            'guests': window.util.randomNumber(1, 5),
-            'checkin': CHECKINS[window.util.randomNumber(0, 2)],
-            'checkout': CHECKOUTS[window.util.randomNumber(0, 2)],
-            'features': window.util.shufflesArray(FEAUTERES),
-            'description': '',
-            'photos': window.util.shufflesArray(PHOTOS)
-          },
-          'location': {
-            'x': window.util.randomNumber(300, 900),
-            'y': window.util.randomNumber(150, 500)
-          }
-        };
-      }
-      return adContents;
+  var generateAdContents = function () {
+    var adContents = [];
+    for (var i = 0; i < GENERATE_PINS; i++) {
+      adContents[i] = {
+        'author': {
+          'avatar': AVATARS[i]
+        },
+        'offer': {
+          'title': TITLES[i],
+          'address': [window.util.randomNumber(300, 900), window.util.randomNumber(150, 500)],
+          'price': window.util.randomNumber(1000, 1000000),
+          'type': TYPES[i],
+          'rooms': window.util.randomNumber(1, 5),
+          'guests': window.util.randomNumber(1, 5),
+          'checkin': CHECKINS[window.util.randomNumber(0, 2)],
+          'checkout': CHECKOUTS[window.util.randomNumber(0, 2)],
+          'features': window.util.shufflesArray(FEAUTERES),
+          'description': '',
+          'photos': window.util.shufflesArray(PHOTOS)
+        },
+        'location': {
+          'x': window.util.randomNumber(300, 900),
+          'y': window.util.randomNumber(150, 500)
+        }
+      };
     }
+    return adContents;
   };
+  window.data = {
+    generateAdContents: generateAdContents
+  };
+
 })();

@@ -1,6 +1,6 @@
 'use strict';
 
-window.map = (function () {
+(function () {
 
   var CONTENT_WIDHT = 1200;
   var MIN_Y_POSITION = 80;
@@ -72,7 +72,6 @@ window.map = (function () {
 
     };
 
-
     var mapPinMainMouseupHandler = function (e) {
       e.preventDefault();
 
@@ -92,8 +91,7 @@ window.map = (function () {
 
   mapPinMain.addEventListener('mousedown', mapPinMainMousedownHandler);
 
-  return {
+  window.map = {
     mapPinMainMousedownHandler: mapPinMainMousedownHandler
   };
-
 })();

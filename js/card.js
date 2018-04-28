@@ -1,6 +1,6 @@
 'use strict';
 
-window.card = (function () {
+(function () {
 
   var templateAdCard = window.util.template.content.querySelector('.map__card');
   var adCard = templateAdCard.cloneNode(true);
@@ -49,14 +49,14 @@ window.card = (function () {
   };
 
   var popupPressEscKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODES.escape) {
+    if (evt.keyCode === window.util.KEYCODE.escape) {
       adCard.remove();
       removePopupHandlers();
     }
   };
 
   var popupPressEnterKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODES.enter) {
+    if (evt.keyCode === window.util.KEYCODE.enter) {
       adCard.remove();
       removePopupHandlers();
     }
@@ -67,42 +67,46 @@ window.card = (function () {
     document.removeEventListener('keydown', popupPressEscKeyHandler);
   };
 
-  return {
-    generateAdCard: function (pinContent) {
-      var adCardAvatar = adCard.querySelector('.popup__avatar');
-      var adCardTitle = adCard.querySelector('.popup__title');
-      var adCardAdress = adCard.querySelector('.popup__text--address');
-      var adCardPrice = adCard.querySelector('.popup__text--price');
-      var adCardType = adCard.querySelector('.popup__type');
-      var adCardСapacity = adCard.querySelector('.popup__text--capacity');
-      var adCardTimes = adCard.querySelector('.popup__text--time');
-      var adCardDescription = adCard.querySelector('.popup__description');
 
-      adCardAvatar.src = pinContent.author.avatar;
-      adCardTitle.textContent = pinContent.offer.title;
-      adCardAdress.textContent = pinContent.offer.address;
-      adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
-      adCardType.textContent = AppartmentTypes[pinContent.offer.type];
-      adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
-        pinContent.offer.rooms + ' гостей';
-      adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
-        ' , выезд до ' + pinContent.offer.checkout;
-      buttonPopupClose.tabIndex = '0';
+  var generateAdCard = function (pinContent) {
+    var adCardAvatar = adCard.querySelector('.popup__avatar');
+    var adCardTitle = adCard.querySelector('.popup__title');
+    var adCardAdress = adCard.querySelector('.popup__text--address');
+    var adCardPrice = adCard.querySelector('.popup__text--price');
+    var adCardType = adCard.querySelector('.popup__type');
+    var adCardСapacity = adCard.querySelector('.popup__text--capacity');
+    var adCardTimes = adCard.querySelector('.popup__text--time');
+    var adCardDescription = adCard.querySelector('.popup__description');
 
-      var newAdCardFeatures = generateFeatures(pinContent.offer.features);
-      adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
-      adCardDescription.textContent = pinContent.offer.description;
-      var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
+    adCardAvatar.src = pinContent.author.avatar;
+    adCardTitle.textContent = pinContent.offer.title;
+    adCardAdress.textContent = pinContent.offer.address;
+    adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
+    adCardType.textContent = AppartmentTypes[pinContent.offer.type];
+    adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
+      pinContent.offer.rooms + ' гостей';
+    adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
+      ' , выезд до ' + pinContent.offer.checkout;
+    buttonPopupClose.tabIndex = '0';
 
-      window.util.deleteAllElements(adCardPhoto, 'img');
+    var newAdCardFeatures = generateFeatures(pinContent.offer.features);
+    adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
+    adCardDescription.textContent = pinContent.offer.description;
+    var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
 
-      adCardPhoto.appendChild(fragmentAdPhotos);
+    window.util.deleteAllElements(adCardPhoto, 'img');
 
-      buttonPopupClose.addEventListener('click', closeButtonPopupClickHandler);
-      document.addEventListener('keydown', popupPressEscKeyHandler);
-      document.addEventListener('keydown', popupPressEnterKeyHandler);
+    adCardPhoto.appendChild(fragmentAdPhotos);
 
-      return adCard;
-    }
+    buttonPopupClose.addEventListener('click', closeButtonPopupClickHandler);
+    document.addEventListener('keydown', popupPressEscKeyHandler);
+    document.addEventListener('keydown', popupPressEnterKeyHandler);
+
+    return adCard;
   };
+
+  window.card = {
+    generateAdCard: generateAdCard
+  };
+
 })();

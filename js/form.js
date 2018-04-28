@@ -1,6 +1,6 @@
 'use strict';
 
-window.form = (function () {
+(function () {
 
   var AppartmentPrice = {
     'palace': 10000,
@@ -104,7 +104,7 @@ window.form = (function () {
   };
   addCoordinate();
 
-  return {
+  window.form = {
     addCoordinate: addCoordinate,
     toggleDisabledInputs: toggleDisabledInputs,
     removeDisabledInputs: removeDisabledInputs
