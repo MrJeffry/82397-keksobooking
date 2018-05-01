@@ -27,36 +27,38 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
 
-  var GENERATE_PINS = 8;
 
-  var generateAdContents = function () {
+
+  var generateAdContents = function (data) {
     var adContents = [];
-    for (var i = 0; i < GENERATE_PINS; i++) {
+    for (var i = 0; i < data.length; i++) {
       adContents[i] = {
         'author': {
-          'avatar': AVATARS[i]
+          'avatar': data[i].author.avatar
         },
         'offer': {
-          'title': TITLES[i],
-          'address': [window.util.randomNumber(300, 900), window.util.randomNumber(150, 500)],
-          'price': window.util.randomNumber(1000, 1000000),
-          'type': TYPES[i],
-          'rooms': window.util.randomNumber(1, 5),
-          'guests': window.util.randomNumber(1, 5),
-          'checkin': CHECKINS[window.util.randomNumber(0, 2)],
-          'checkout': CHECKOUTS[window.util.randomNumber(0, 2)],
-          'features': window.util.shufflesArray(FEAUTERES),
-          'description': '',
-          'photos': window.util.shufflesArray(PHOTOS)
+          'title': data[i].offer.title,
+          'address': data[i].offer.address,
+          'price': data[i].offer.price,
+          'type': data[i].offer.type,
+          'rooms': data[i].offer.rooms,
+          'guests': data[i].offer.guests,
+          'checkin': data[i].offer.checkin,
+          'checkout': data[i].offer.checkout,
+          'features': data[i].offer.features,
+          'description': data[i].offer.description,
+          'photos': data[i].offer.photos
         },
         'location': {
-          'x': window.util.randomNumber(300, 900),
-          'y': window.util.randomNumber(150, 500)
+          'x': data[i].location.x,
+          'y': data[i].location.y
         }
       };
     }
+    console.log(adContents)
     return adContents;
   };
+
   window.data = {
     generateAdContents: generateAdContents
   };

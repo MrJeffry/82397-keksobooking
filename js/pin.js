@@ -4,9 +4,11 @@
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
 
+
   var mapFiltersContainer = window.util.mapSection.querySelector('.map__filters-container');
 
-  var pinContents = window.data.generateAdContents();
+  // var pinContents = window.data.generateAdContents();
+  // var pinContents = window.backend.dataLoad(window.data.generateAdContents);
   var mapPins = window.util.mapSection.querySelector('.map__pins');
 
   var mapPinClickHandler = function (evt) {
@@ -16,6 +18,7 @@
   };
 
   var createPin = function (adContents) {
+    console.log(adContents)
     var templatePin = window.util.template.content.querySelector('.map__pin');
     var myPin = templatePin.cloneNode(true);
     var myPinImg = myPin.querySelector('img');
@@ -31,6 +34,7 @@
   };
 
   var generatePins = function (arrayAd) {
+    console.log(arrayAd)
     var fragmentPins = document.createDocumentFragment();
     for (var i = 0; i < arrayAd.length; i++) {
       fragmentPins.appendChild(createPin(arrayAd[i]));
@@ -39,7 +43,7 @@
   };
 
   window.pin = {
-    fragmentPins: generatePins(pinContents)
+    generatePins: generatePins
   };
 
 })();

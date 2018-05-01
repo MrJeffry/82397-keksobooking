@@ -10,6 +10,11 @@
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
   var mapPins = window.util.mapSection.querySelector('.map__pins');
 
+  var pinContents = window.backend.dataLoad(window.data.generateAdContents);
+
+  console.log(pinContents)
+
+
   var setPinPosition = function (elem, position) {
     elem.style.top = position.y + 'px';
     elem.style.left = position.x + 'px';
@@ -82,7 +87,7 @@
 
       window.form.removeDisabledInputs();
 
-      mapPins.appendChild(window.pin.fragmentPins);
+      mapPins.appendChild(window.pin.generatePins(pinContents));
     };
 
     document.addEventListener('mouseup', mapPinMainMouseupHandler);
