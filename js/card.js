@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var templateAdCard = window.util.template.content.querySelector('.map__card');
   var adCard = templateAdCard.cloneNode(true);
   var adCardPhoto = adCard.querySelector('.popup__photos');
@@ -49,14 +48,14 @@
   };
 
   var popupPressEscKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODE.escape) {
+    if (evt.keyCode === window.util.KEYCODE.ESCAPE) {
       adCard.remove();
       removePopupHandlers();
     }
   };
 
   var popupPressEnterKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODE.enter) {
+    if (evt.keyCode === window.util.KEYCODE.ENTER) {
       adCard.remove();
       removePopupHandlers();
     }

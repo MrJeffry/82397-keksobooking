@@ -1,8 +1,10 @@
 'use strict';
 
 (function () {
-  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
-  var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
+  var URL = {
+    LOAD: 'https://js.dump.academy/keksobooking/data',
+    UPLOAD: 'https://js.dump.academy/keksobookin'
+  };
 
   var xhrConfig = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -29,13 +31,13 @@
 
   var dataLoad = function (onSuccess, onError) {
     var xhr = xhrConfig(onSuccess, onError);
-    xhr.open('GET', URL_LOAD);
+    xhr.open('GET', URL.LOAD);
     xhr.send();
   };
 
   var dataUpload = function (data, onSuccess, onError) {
     var xhr = xhrConfig(onSuccess, onError);
-    xhr.open('POST', URL_UPLOAD);
+    xhr.open('POST', URL.UPLOAD);
     xhr.send(data);
   };
 

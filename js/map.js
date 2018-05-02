@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var CONTENT_WIDHT = 1200;
   var MIN_Y_POSITION = 80;
   var MAX_Y_POSITION = 568;

@@ -1,13 +1,13 @@
 'use strict';
 (function () {
-
   var KEYCODE = {
-    escape: 27,
-    enter: 13
+    ESCAPE: 27,
+    ENTER: 13
   };
   var mapSection = document.querySelector('.map');
   var template = document.querySelector('template');
   var adForm = document.querySelector('.ad-form');
+  var body = document.querySelector('body');
 
   var shufflesArray = function (array) {
     var randomNumbers = [];
@@ -40,10 +40,11 @@
     mapSection: mapSection,
     template: template,
     adForm: adForm,
+    body: body,
     shufflesArray: shufflesArray,
     randomNumber: randomNumber,
     deleteAllElements: deleteAllElements,
-    convertNodeListToArray: convertNodeListToArray
+    convertNodeListToArray: convertNodeListToArray,
   };
 
 })();
