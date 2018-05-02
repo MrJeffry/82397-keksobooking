@@ -69,6 +69,7 @@
 
 
   var generateAdCard = function (pinContent) {
+    console.log(pinContent)
     var adCardAvatar = adCard.querySelector('.popup__avatar');
     var adCardTitle = adCard.querySelector('.popup__title');
     var adCardAdress = adCard.querySelector('.popup__text--address');

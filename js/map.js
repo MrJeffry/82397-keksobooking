@@ -8,12 +8,6 @@
   var MIN_X_POSITION = 20;
 
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
-  var mapPins = window.util.mapSection.querySelector('.map__pins');
-
-  var pinContents = window.backend.dataLoad(window.data.generateAdContents);
-
-  console.log(pinContents)
-
 
   var setPinPosition = function (elem, position) {
     elem.style.top = position.y + 'px';
@@ -86,8 +80,7 @@
       window.util.mapSection.classList.remove('map--faded');
 
       window.form.removeDisabledInputs();
-
-      mapPins.appendChild(window.pin.generatePins(pinContents));
+      window.pin.addPinsToMap();
     };
 
     document.addEventListener('mouseup', mapPinMainMouseupHandler);

@@ -27,37 +27,34 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
 
-
-
-  var generateAdContents = function (data) {
-    var adContents = [];
-    for (var i = 0; i < data.length; i++) {
-      adContents[i] = {
-        'author': {
-          'avatar': data[i].author.avatar
-        },
-        'offer': {
-          'title': data[i].offer.title,
-          'address': data[i].offer.address,
-          'price': data[i].offer.price,
-          'type': data[i].offer.type,
-          'rooms': data[i].offer.rooms,
-          'guests': data[i].offer.guests,
-          'checkin': data[i].offer.checkin,
-          'checkout': data[i].offer.checkout,
-          'features': data[i].offer.features,
-          'description': data[i].offer.description,
-          'photos': data[i].offer.photos
-        },
-        'location': {
-          'x': data[i].location.x,
-          'y': data[i].location.y
-        }
-      };
-    }
-    console.log(adContents)
-    return adContents;
-  };
+  // var generateAdContents = function (data) {
+  //   var adContents = [];
+  //   for (var i = 0; i < data.length; i++) {
+  //     adContents[i] = {
+  //       'author': {
+  //         'avatar': data[i].author.avatar
+  //       },
+  //       'offer': {
+  //         'title': data[i].offer.title,
+  //         'address': data[i].offer.address,
+  //         'price': data[i].offer.price,
+  //         'type': data[i].offer.type,
+  //         'rooms': data[i].offer.rooms,
+  //         'guests': data[i].offer.guests,
+  //         'checkin': data[i].offer.checkin,
+  //         'checkout': data[i].offer.checkout,
+  //         'features': data[i].offer.features,
+  //         'description': data[i].offer.description,
+  //         'photos': data[i].offer.photos
+  //       },
+  //       'location': {
+  //         'x': data[i].location.x,
+  //         'y': data[i].location.y
+  //       }
+  //     };
+  //   }
+  //   return adContents;
+  // };
 
   window.data = {
     generateAdContents: generateAdContents
