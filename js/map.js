@@ -80,7 +80,7 @@
       window.util.mapSection.classList.remove('map--faded');
 
       window.form.removeDisabledInputs();
-      window.pin.addPinsToMap();
+      window.pin();
     };
 
     document.addEventListener('mouseup', mapPinMainMouseupHandler);

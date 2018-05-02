@@ -8,21 +8,11 @@
   var fragmentPins = document.createDocumentFragment();
   var mapPins = window.util.mapSection.querySelector('.map__pins');
 
-  window.backend.dataLoad(datas);
-
-  var datas = function (data) {
-    window.datas = {
-      data: data
-    };
-  };
-
   var mapPinClickHandler = function (evt) {
     var mapPin = mapPins.querySelectorAll('.map__pin');
     var currentTargetIndex = window.util.convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
-    // mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card.generateAdCard(data[currentTargetIndex - 1]));
-    console.log(window.datas.data)
+    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.data[currentTargetIndex - 1]));
   };
-
 
   var createPin = function (adContents) {
     var templatePin = window.util.template.content.querySelector('.map__pin');
@@ -40,23 +30,19 @@
 
   var generatePins = function (arrayAd) {
     arrayAd.forEach(function (item) {
-      //Это и есть ко
-      createPin(item, addPinsToMap);
+      createPin(item);
     });
   };
 
   var addPinsToMap = function () {
-    mapPins.appendChild(fragmentPins);
+    if (mapPins.childElementCount <= 2) {
+      mapPins.appendChild(fragmentPins);
+    }
+    return false;
   };
 
   window.backend.dataLoad(generatePins);
 
-  window.pin = {
-    addPinsToMap: addPinsToMap
-  };
+  window.pin = addPinsToMap;
 
 })();
-
-// Мы загружаем данные в момен загрузки страницы -> наполняем пины -> складываем их в фрагмент -> при движении пина фракмент отображаем на карте
-
-//Что это за дефаулт?

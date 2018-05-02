@@ -15,7 +15,7 @@
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения. Код ошибки ' + xhr.statusText);
     });
 
     xhr.addEventListener('timeout', function () {
@@ -33,3 +33,5 @@
   };
 
 })();
+
+//Разбить аякс на 3 функции, конфигурирование, отправка, загрузка
