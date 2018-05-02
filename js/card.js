@@ -92,10 +92,9 @@
     var newAdCardFeatures = generateFeatures(pinContent.offer.features);
     adCardDescription.insertAdjacentElement('beforeBegin', newAdCardFeatures);
     adCardDescription.textContent = pinContent.offer.description;
+
     var fragmentAdPhotos = generatedPhotos(pinContent.offer.photos);
-
     window.util.deleteAllElements(adCardPhoto, 'img');
-
     adCardPhoto.appendChild(fragmentAdPhotos);
 
     buttonPopupClose.addEventListener('click', closeButtonPopupClickHandler);

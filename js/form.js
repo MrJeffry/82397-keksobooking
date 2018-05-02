@@ -61,6 +61,18 @@
 
   var formSubmitButtonClickHandler = function () {
     vialidateRoomsSelect(selectRooms.value, selectPlace.value);
+    var succes = document.querySelector('.success');
+    window.util.adForm.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      window.backend.dataUpload(new FormData(window.util.adForm), function () {
+        succes.classList.remove('hidden');
+        setTimeout(function () {
+          succes.classList.add('hidden');
+          window.util.adForm.reset();
+          addCoordinate();
+        }, 3000);
+      });
+    });
   };
 
   var toggleDisabledInputs = function (array, inDisabled) {
