@@ -1,6 +1,20 @@
 'use strict';
 
 (function () {
+  var ERROR_BLOCK = {
+    POSITION: 'fixed',
+    LEFT: 0,
+    TOP: 0,
+    PADDING_TOP: 30,
+    WIDTH: 100,
+    HEIGTH: 100,
+    FONT_SIZE: 24,
+    TEXT_ALIGN: 'center',
+    COLOR: 'white',
+    BACKGROUND: 'red',
+    Z_INDEX: 10
+  };
+
   var AppartmentPrice = {
     'palace': 10000,
     'flat': 1000,
@@ -70,16 +84,18 @@
 
   var errorFormSubmit = function (error) {
     var errorBlock = document.createElement('div');
-    errorBlock.style.width = 100 + '%';
-    errorBlock.style.height = 100 + 'px';
-    errorBlock.style.background = 'red';
-    errorBlock.style.position = 'fixed';
-    errorBlock.style.left = 0;
-    errorBlock.style.top = 0;
-    errorBlock.style.fontSize = 24 + 'px';
-    errorBlock.style.color = 'white';
-    errorBlock.style.textAlign = 'center';
-    errorBlock.style.paddingTop = 30 + 'px';
+
+    errorBlock.style.position = ERROR_BLOCK.POSITION;
+    errorBlock.style.left = ERROR_BLOCK.LEFT;
+    errorBlock.style.top = ERROR_BLOCK.TOP;
+    errorBlock.style.width = ERROR_BLOCK.WIDTH + '%';
+    errorBlock.style.height = ERROR_BLOCK.HEIGTH + 'px';
+    errorBlock.style.paddingTop = ERROR_BLOCK.PADDING_TOP + 'px';
+    errorBlock.style.fontSize = ERROR_BLOCK.FONT_SIZE + 'px';
+    errorBlock.style.color = ERROR_BLOCK.COLOR;
+    errorBlock.style.textAlign = ERROR_BLOCK.TEXT_ALIGN;
+    errorBlock.style.background = ERROR_BLOCK.BACKGROUND;
+    errorBlock.style.zIndex = ERROR_BLOCK.Z_INDEX;
     errorBlock.textContent = error;
 
     window.util.body.appendChild(errorBlock);

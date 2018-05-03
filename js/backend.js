@@ -3,7 +3,7 @@
 (function () {
   var URL = {
     LOAD: 'https://js.dump.academy/keksobooking/data',
-    UPLOAD: 'https://js.dump.academy/keksobookin'
+    UPLOAD: 'https://js.dump.academy/keksobooking'
   };
 
   var xhrConfig = function (onSuccess, onError) {
