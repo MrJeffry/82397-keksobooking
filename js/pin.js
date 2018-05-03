@@ -1,18 +1,16 @@
 'use strict';
-window.pin = (function () {
-
+(function () {
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
 
   var mapFiltersContainer = window.util.mapSection.querySelector('.map__filters-container');
-
-  var pinContents = window.data.generateAdContents();
+  var fragmentPins = document.createDocumentFragment();
   var mapPins = window.util.mapSection.querySelector('.map__pins');
 
   var mapPinClickHandler = function (evt) {
     var mapPin = mapPins.querySelectorAll('.map__pin');
     var currentTargetIndex = window.util.convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
-    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card.generateAdCard(pinContents[currentTargetIndex - 1]));
+    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.data[currentTargetIndex - 1]));
   };
 
   var createPin = function (adContents) {
@@ -26,20 +24,24 @@ window.pin = (function () {
     myPinImg.alt = adContents.offer.title;
 
     myPin.addEventListener('click', mapPinClickHandler);
-
-    return myPin;
+    fragmentPins.appendChild(myPin);
   };
 
   var generatePins = function (arrayAd) {
-    var fragmentPins = document.createDocumentFragment();
-    for (var i = 0; i < arrayAd.length; i++) {
-      fragmentPins.appendChild(createPin(arrayAd[i]));
-    }
-    return fragmentPins;
+    arrayAd.forEach(function (item) {
+      createPin(item);
+    });
   };
 
-  return {
-    fragmentPins: generatePins(pinContents)
+  var addPinsToMap = function () {
+    if (mapPins.childElementCount <= 2) {
+      mapPins.appendChild(fragmentPins);
+    }
+    return false;
   };
+
+  window.backend.dataLoad(generatePins);
+
+  window.pin = addPinsToMap;
 
 })();

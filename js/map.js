@@ -1,14 +1,12 @@
 'use strict';
 
-window.map = (function () {
-
+(function () {
   var CONTENT_WIDHT = 1200;
   var MIN_Y_POSITION = 80;
   var MAX_Y_POSITION = 568;
   var MIN_X_POSITION = 20;
 
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
-  var mapPins = window.util.mapSection.querySelector('.map__pins');
 
   var setPinPosition = function (elem, position) {
     elem.style.top = position.y + 'px';
@@ -72,7 +70,6 @@ window.map = (function () {
 
     };
 
-
     var mapPinMainMouseupHandler = function (e) {
       e.preventDefault();
 
@@ -82,8 +79,7 @@ window.map = (function () {
       window.util.mapSection.classList.remove('map--faded');
 
       window.form.removeDisabledInputs();
-
-      mapPins.appendChild(window.pin.fragmentPins);
+      window.pin();
     };
 
     document.addEventListener('mouseup', mapPinMainMouseupHandler);
@@ -92,8 +88,7 @@ window.map = (function () {
 
   mapPinMain.addEventListener('mousedown', mapPinMainMousedownHandler);
 
-  return {
+  window.map = {
     mapPinMainMousedownHandler: mapPinMainMousedownHandler
   };
-
 })();

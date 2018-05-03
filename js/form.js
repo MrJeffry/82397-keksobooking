@@ -1,6 +1,19 @@
 'use strict';
 
-window.form = (function () {
+(function () {
+  var ERROR_BLOCK = {
+    POSITION: 'fixed',
+    LEFT: 0,
+    TOP: 0,
+    PADDING_TOP: 30,
+    WIDTH: 100,
+    HEIGTH: 100,
+    FONT_SIZE: 24,
+    TEXT_ALIGN: 'center',
+    COLOR: 'white',
+    BACKGROUND: 'red',
+    Z_INDEX: 10
+  };
 
   var AppartmentPrice = {
     'palace': 10000,
@@ -59,8 +72,44 @@ window.form = (function () {
     }
   };
 
+  var successSumbit = function () {
+    var success = document.querySelector('.success');
+    success.classList.remove('hidden');
+    setTimeout(function () {
+      success.classList.add('hidden');
+      window.util.adForm.reset();
+      addCoordinate();
+    }, 3000);
+  };
+
+  var errorFormSubmit = function (error) {
+    var errorBlock = document.createElement('div');
+
+    errorBlock.style.position = ERROR_BLOCK.POSITION;
+    errorBlock.style.left = ERROR_BLOCK.LEFT;
+    errorBlock.style.top = ERROR_BLOCK.TOP;
+    errorBlock.style.width = ERROR_BLOCK.WIDTH + '%';
+    errorBlock.style.height = ERROR_BLOCK.HEIGTH + 'px';
+    errorBlock.style.paddingTop = ERROR_BLOCK.PADDING_TOP + 'px';
+    errorBlock.style.fontSize = ERROR_BLOCK.FONT_SIZE + 'px';
+    errorBlock.style.color = ERROR_BLOCK.COLOR;
+    errorBlock.style.textAlign = ERROR_BLOCK.TEXT_ALIGN;
+    errorBlock.style.background = ERROR_BLOCK.BACKGROUND;
+    errorBlock.style.zIndex = ERROR_BLOCK.Z_INDEX;
+    errorBlock.textContent = error;
+
+    window.util.body.appendChild(errorBlock);
+    setTimeout(function () {
+      errorBlock.remove();
+    }, 3000);
+  };
+
   var formSubmitButtonClickHandler = function () {
     vialidateRoomsSelect(selectRooms.value, selectPlace.value);
+    window.util.adForm.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      window.backend.dataUpload(new FormData(window.util.adForm), successSumbit, errorFormSubmit);
+    });
   };
 
   var toggleDisabledInputs = function (array, inDisabled) {
@@ -104,7 +153,7 @@ window.form = (function () {
   };
   addCoordinate();
 
-  return {
+  window.form = {
     addCoordinate: addCoordinate,
     toggleDisabledInputs: toggleDisabledInputs,
     removeDisabledInputs: removeDisabledInputs
