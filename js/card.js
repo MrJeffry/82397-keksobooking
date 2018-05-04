@@ -35,7 +35,7 @@
     adCardFeatures.remove();
     arrayAdFeatures.forEach(function (item) {
       newAdCardFeatures.innerHTML +=
-      '<li class="popup__feature popup__feature--' + item + '"></li>';
+        '<li class="popup__feature popup__feature--' + item + '"></li>';
     });
     return newAdCardFeatures;
   };
@@ -65,7 +65,6 @@
     buttonPopupClose.removeEventListener('keydown', popupPressEnterKeyHandler);
     document.removeEventListener('keydown', popupPressEscKeyHandler);
   };
-
 
   var generateAdCard = function (pinContent) {
     var adCardAvatar = adCard.querySelector('.popup__avatar');

@@ -10,7 +10,7 @@
   var mapPinClickHandler = function (evt) {
     var mapPin = mapPins.querySelectorAll('.map__pin');
     var currentTargetIndex = window.util.convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
-    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.data[currentTargetIndex - 1]));
+    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.initialData[currentTargetIndex - 1]));
   };
 
   var createPin = function (adContents) {
@@ -25,9 +25,11 @@
 
     myPin.addEventListener('click', mapPinClickHandler);
     fragmentPins.appendChild(myPin);
+    addPinsToMap();
   };
 
   var generatePins = function (arrayAd) {
+    console.log(arrayAd)
     arrayAd.forEach(function (item) {
       createPin(item);
     });
@@ -40,8 +42,12 @@
     return false;
   };
 
-  window.backend.dataLoad(generatePins);
+  // window.backend.dataLoad(generatePins);
 
-  window.pin = addPinsToMap;
+  window.pin = {
+    addPinsToMap: addPinsToMap,
+    generatePins: generatePins
+  };
+
 
 })();
