@@ -79,7 +79,8 @@
       window.util.mapSection.classList.remove('map--faded');
 
       window.form.removeDisabledInputs();
-      window.pin.addPinsToMap();
+      window.pin.generatePins(window.initialData);
+
     };
 
     document.addEventListener('mouseup', mapPinMainMouseupHandler);

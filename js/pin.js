@@ -25,29 +25,34 @@
 
     myPin.addEventListener('click', mapPinClickHandler);
     fragmentPins.appendChild(myPin);
-    addPinsToMap();
   };
 
   var generatePins = function (arrayAd) {
-    console.log(arrayAd)
     arrayAd.forEach(function (item) {
       createPin(item);
     });
+    window.pin.addPinsToMap();
+  };
+
+  var removeChildMap = function () {
+    console.log(mapPins.children.length)
+  for (var i = 0; i < mapPins.children.length; i++) {
+    mapPins.children[i].remove();
+  }
   };
 
   var addPinsToMap = function () {
     if (mapPins.childElementCount <= 2) {
       mapPins.appendChild(fragmentPins);
+    } else if (mapPins.childElementCount >= 2) {
+      removeChildMap();
+      mapPins.appendChild(fragmentPins);
     }
-    return false;
-  };
 
-  // window.backend.dataLoad(generatePins);
+  };
 
   window.pin = {
     addPinsToMap: addPinsToMap,
     generatePins: generatePins
   };
-
-
 })();

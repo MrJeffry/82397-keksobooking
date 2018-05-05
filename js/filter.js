@@ -11,6 +11,6 @@
       return data.offer.type === e.target.value;
     });
     window.pin.generatePins(filterData);
-    window.backend.dataLoad(window.pin.generatePins);
+    // window.backend.dataLoad(window.pin.generatePins);
   });
 })();
