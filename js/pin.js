@@ -10,7 +10,11 @@
   var mapPinClickHandler = function (evt) {
     var mapPin = mapPins.querySelectorAll('.map__pin');
     var currentTargetIndex = window.util.convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
-    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.data[currentTargetIndex - 1]));
+    if (window.filters.filterData.length !== 0) {
+      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card.generateAdCard(window.filters.filterData[currentTargetIndex - 1]));
+    } else {
+      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card.generateAdCard(window.initialData[currentTargetIndex - 1]));
+    }
   };
 
   var createPin = function (adContents) {
@@ -31,17 +35,28 @@
     arrayAd.forEach(function (item) {
       createPin(item);
     });
+    addPinsToMap();
+  };
+
+  var removeChildMap = function () {
+    var mapPinsChildren = mapPins.querySelectorAll('[type="button"]');
+    mapPinsChildren = window.util.convertNodeListToArray(mapPinsChildren);
+    mapPinsChildren.forEach(function (item) {
+      mapPins.removeChild(item);
+    });
   };
 
   var addPinsToMap = function () {
     if (mapPins.childElementCount <= 2) {
       mapPins.appendChild(fragmentPins);
+    } else if (mapPins.childElementCount >= 2) {
+      removeChildMap();
+      mapPins.appendChild(fragmentPins);
     }
-    return false;
   };
 
-  window.backend.dataLoad(generatePins);
-
-  window.pin = addPinsToMap;
-
+  window.pin = {
+    addPinsToMap: addPinsToMap,
+    generatePins: generatePins
+  };
 })();

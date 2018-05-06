@@ -8,6 +8,10 @@
 
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
 
+  var lastTimeout;
+
+  var DEBOUNCE_INTERVAL = 500;
+
   var setPinPosition = function (elem, position) {
     elem.style.top = position.y + 'px';
     elem.style.left = position.x + 'px';
@@ -36,8 +40,39 @@
     }
   };
 
-  var mapPinMainMousedownHandler = function (evt) {
+  var filter = document.querySelector('.map__filters-container');
 
+  var addFiltersInputsHendler = function () {
+    var filterInputs = filter.querySelectorAll('input');
+    var filterSelect = filter.querySelectorAll('select');
+
+    filterInputs = window.util.convertNodeListToArray(filterInputs);
+    filterSelect = window.util.convertNodeListToArray(filterSelect);
+
+    filterInputs.forEach(function (item) {
+      item.addEventListener('change', filtersChangeHendler);
+    });
+
+    filterSelect.forEach(function (item) {
+      item.addEventListener('change', filtersChangeHendler);
+    });
+  };
+
+  var setFilters = function () {
+    window.card.adCard.remove();
+    window.filters.filterData = window.filters.setFilters();
+    window.pin.generatePins(window.filters.filterData);
+  };
+
+  var filtersChangeHendler = function () {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+      lastTimeout = null;
+    }
+    lastTimeout = window.setTimeout(setFilters, DEBOUNCE_INTERVAL);
+  };
+
+  var mapPinMainMousedownHandler = function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -79,7 +114,8 @@
       window.util.mapSection.classList.remove('map--faded');
 
       window.form.removeDisabledInputs();
-      window.pin();
+      window.pin.generatePins(window.initialData);
+
     };
 
     document.addEventListener('mouseup', mapPinMainMouseupHandler);
@@ -88,7 +124,10 @@
 
   mapPinMain.addEventListener('mousedown', mapPinMainMousedownHandler);
 
+  addFiltersInputsHendler();
+
   window.map = {
-    mapPinMainMousedownHandler: mapPinMainMousedownHandler
+    mapPinMainMousedownHandler: mapPinMainMousedownHandler,
+    setFilters: setFilters
   };
 })();

@@ -14,10 +14,8 @@
 
   var createAdPhotos = function (arrayAdPhotos) {
     var adCardPhotosImg = adCardPhoto.querySelector('img');
-    if (adCardPhotosImg !== 'null') {
-      var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
-      adCardPhotosItems.src = arrayAdPhotos;
-    }
+    var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    adCardPhotosItems.src = arrayAdPhotos;
     return adCardPhotosItems;
   };
 
@@ -35,7 +33,7 @@
     adCardFeatures.remove();
     arrayAdFeatures.forEach(function (item) {
       newAdCardFeatures.innerHTML +=
-      '<li class="popup__feature popup__feature--' + item + '"></li>';
+        '<li class="popup__feature popup__feature--' + item + '"></li>';
     });
     return newAdCardFeatures;
   };
@@ -66,7 +64,6 @@
     document.removeEventListener('keydown', popupPressEscKeyHandler);
   };
 
-
   var generateAdCard = function (pinContent) {
     var adCardAvatar = adCard.querySelector('.popup__avatar');
     var adCardTitle = adCard.querySelector('.popup__title');
@@ -83,7 +80,7 @@
     adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
     adCardType.textContent = AppartmentTypes[pinContent.offer.type];
     adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
-      pinContent.offer.rooms + ' гостей';
+      pinContent.offer.guests + ' гостей';
     adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
       ' , выезд до ' + pinContent.offer.checkout;
     buttonPopupClose.tabIndex = '0';
@@ -103,6 +100,9 @@
     return adCard;
   };
 
-  window.card = generateAdCard;
+  window.card = {
+    generateAdCard: generateAdCard,
+    adCard: adCard
+  };
 
 })();
