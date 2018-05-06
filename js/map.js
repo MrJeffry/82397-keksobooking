@@ -8,6 +8,10 @@
 
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
 
+  var lastTimeout;
+
+  var DEBOUNCE_INTERVAL = 500;
+
   var setPinPosition = function (elem, position) {
     elem.style.top = position.y + 'px';
     elem.style.left = position.x + 'px';
@@ -61,7 +65,11 @@
   };
 
   var filtersChangeHendler = function () {
-    window.map.setFilters();
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+      lastTimeout = null;
+    }
+    lastTimeout = window.setTimeout(setFilters, DEBOUNCE_INTERVAL);
   };
 
   var mapPinMainMousedownHandler = function (evt) {
