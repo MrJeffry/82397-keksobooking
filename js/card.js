@@ -82,7 +82,7 @@
     adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
     adCardType.textContent = AppartmentTypes[pinContent.offer.type];
     adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
-      pinContent.offer.rooms + ' гостей';
+      pinContent.offer.guest + ' гостей';
     adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
       ' , выезд до ' + pinContent.offer.checkout;
     buttonPopupClose.tabIndex = '0';

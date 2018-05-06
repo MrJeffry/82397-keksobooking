@@ -54,16 +54,14 @@
     });
   };
 
-  // var setFilters = function () {
-  //   window.filters.filterData = window.filters.setFilters();
-  //   window.pin.generatePins(window.filters.filterData);
-  // };
-
-  var filtersChangeHendler = function () {
+  var setFilters = function () {
     window.card.adCard.remove();
     window.filters.filterData = window.filters.setFilters();
     window.pin.generatePins(window.filters.filterData);
-    // window.debounce(setFilters);
+  };
+
+  var filtersChangeHendler = function () {
+    window.map.setFilters();
   };
 
   var mapPinMainMousedownHandler = function (evt) {
@@ -121,6 +119,7 @@
   addFiltersInputsHendler();
 
   window.map = {
-    mapPinMainMousedownHandler: mapPinMainMousedownHandler
+    mapPinMainMousedownHandler: mapPinMainMousedownHandler,
+    setFilters: setFilters
   };
 })();

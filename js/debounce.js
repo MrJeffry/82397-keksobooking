@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var DEBOUNCE_INTERVAL = 500;
+  var DEBOUNCE_INTERVAL = 5000;
   window.debounce = function (fun) {
     var lastTimeout = null;
 
@@ -15,4 +15,8 @@
       }, DEBOUNCE_INTERVAL);
     };
   };
+  var alerts = function () {
+    console.log('!')
+  };
+  window.debounce(alerts);
 })();
