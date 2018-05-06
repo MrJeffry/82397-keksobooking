@@ -32,7 +32,7 @@
   };
 
   var generatePins = function (arrayAd) {
-    console.log(arrayAd);
+    console.log(arrayAd)
     arrayAd.forEach(function (item) {
       createPin(item);
     });

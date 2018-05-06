@@ -36,8 +36,36 @@
     }
   };
 
-  var mapPinMainMousedownHandler = function (evt) {
+  var filter = document.querySelector('.map__filters-container');
 
+  var addFiltersInputsHendler = function () {
+    var filterInputs = filter.querySelectorAll('input');
+    var filterSelect = filter.querySelectorAll('select');
+
+    filterInputs = window.util.convertNodeListToArray(filterInputs);
+    filterSelect = window.util.convertNodeListToArray(filterSelect);
+
+    filterInputs.forEach(function (item) {
+      item.addEventListener('change', filtersChangeHendler);
+    });
+
+    filterSelect.forEach(function (item) {
+      item.addEventListener('change', filtersChangeHendler);
+    });
+  };
+
+  // var setFilters = function () {
+  //   window.filters.filterData = window.filters.setFilters();
+  //   window.pin.generatePins(window.filters.filterData);
+  // };
+
+  var filtersChangeHendler = function () {
+    window.filters.filterData = window.filters.setFilters();
+    window.pin.generatePins(window.filters.filterData);
+    // window.debounce(setFilters);
+  };
+
+  var mapPinMainMousedownHandler = function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -88,6 +116,8 @@
   };
 
   mapPinMain.addEventListener('mousedown', mapPinMainMousedownHandler);
+
+  addFiltersInputsHendler();
 
   window.map = {
     mapPinMainMousedownHandler: mapPinMainMousedownHandler

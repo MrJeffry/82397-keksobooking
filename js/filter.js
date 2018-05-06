@@ -42,14 +42,15 @@
     return true;
   };
 
-  var setFilterByRooms = function (filterValue, item) {
-    console.log(item)
-    return filterValue === 'any' || item === filterValue;
-  };
+  // var setFilterByRooms = function(item) {
+  //   if (roomsPriceSelect.value === 'any') {
+  //     return item === 'any';
+  //   }
+  // };
 
-  var setFilterGuests = function (filterValue, item) {
-    return filterValue === 'any' || item === filterValue;
-  };
+  // var setFilterGuests = function (filterValue, item) {
+  //   return filterValue === 'any' || item === filterValue;
+  // };
 
   var setFilterByFeautures = function (filterFeautures, itemFeautures) {
     return filterFeautures.every(function (item) {
@@ -75,42 +76,16 @@
       if (!setFilterByFeautures(selectedFeatures, item.offer.features)) {
         return false;
       }
-      if (!setFilterByRooms(roomsPriceSelect.value, item.offer.rooms)) {
-        return false;
-      }
-      if (!setFilterGuests(apparmentGuestsSelect.value, item.offer.guests)) {
-        return false;
-      }
+      // if (!setFilterByRooms(item.offer.rooms)) {
+      //   return false;
+      // }
+      // if (!setFilterGuests(item.offer.guests)) {
+      //   return false;
+      // }
+
       return true;
     });
   };
-
-  appartamentTypesSelect.addEventListener('change', function () {
-    window.filters.filterData = setFilters();
-    window.pin.generatePins(window.filters.filterData);
-  });
-
-  apparmentPriceSelect.addEventListener('change', function () {
-    window.filters.filterData = setFilters();
-    window.pin.generatePins(window.filters.filterData);
-  });
-
-  roomsPriceSelect.addEventListener('change', function () {
-    window.filters.filterData = setFilters();
-    window.pin.generatePins(window.filters.filterData);
-  });
-
-  apparmentGuestsSelect.addEventListener('change', function () {
-    window.filters.filterData = setFilters();
-    window.pin.generatePins(window.filters.filterData);
-  });
-
-  allFeatures.forEach(function (item) {
-    item.addEventListener('change', function () {
-      window.filters.filterData = setFilters();
-      window.pin.generatePins(window.filters.filterData);
-    });
-  });
 
   window.filters = {
     setFilters: setFilters,
