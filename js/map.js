@@ -60,6 +60,7 @@
   // };
 
   var filtersChangeHendler = function () {
+    window.card.adCard.remove();
     window.filters.filterData = window.filters.setFilters();
     window.pin.generatePins(window.filters.filterData);
     // window.debounce(setFilters);

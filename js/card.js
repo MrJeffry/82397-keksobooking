@@ -102,6 +102,9 @@
     return adCard;
   };
 
-  window.card = generateAdCard;
+  window.card = {
+    generateAdCard: generateAdCard,
+    adCard: adCard
+  };
 
 })();

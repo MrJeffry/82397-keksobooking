@@ -11,9 +11,9 @@
     var mapPin = mapPins.querySelectorAll('.map__pin');
     var currentTargetIndex = window.util.convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
     if (window.filters.filterData.length !== 0) {
-      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.filters.filterData[currentTargetIndex - 1]));
+      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card.generateAdCard(window.filters.filterData[currentTargetIndex - 1]));
     } else {
-      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.initialData[currentTargetIndex - 1]));
+      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card.generateAdCard(window.initialData[currentTargetIndex - 1]));
     }
   };
 
@@ -32,7 +32,6 @@
   };
 
   var generatePins = function (arrayAd) {
-    console.log(arrayAd)
     arrayAd.forEach(function (item) {
       createPin(item);
     });
