@@ -10,7 +10,11 @@
   var mapPinClickHandler = function (evt) {
     var mapPin = mapPins.querySelectorAll('.map__pin');
     var currentTargetIndex = window.util.convertNodeListToArray(mapPin).indexOf(evt.currentTarget);
-    mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.initialData[currentTargetIndex - 1]));
+    if (window.filters.filterData.length !== 0) {
+      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.filters.filterData[currentTargetIndex - 1]));
+    } else {
+      mapFiltersContainer.insertAdjacentElement('beforeBegin', window.card(window.initialData[currentTargetIndex - 1]));
+    }
   };
 
   var createPin = function (adContents) {
@@ -31,14 +35,15 @@
     arrayAd.forEach(function (item) {
       createPin(item);
     });
-    window.pin.addPinsToMap();
+    addPinsToMap();
   };
 
   var removeChildMap = function () {
-    console.log(mapPins.children.length)
-  for (var i = 0; i < mapPins.children.length; i++) {
-    mapPins.children[i].remove();
-  }
+    var mapPinsChildren = mapPins.querySelectorAll('[type="button"]');
+    mapPinsChildren = window.util.convertNodeListToArray(mapPinsChildren);
+    mapPinsChildren.forEach(function (item) {
+      mapPins.removeChild(item);
+    });
   };
 
   var addPinsToMap = function () {
@@ -48,7 +53,6 @@
       removeChildMap();
       mapPins.appendChild(fragmentPins);
     }
-
   };
 
   window.pin = {
