@@ -50,6 +50,12 @@
     });
   };
 
+  var resetFormHandler = function () {
+    setTimeout(function () {
+      addCoordinate();
+    });
+  };
+
   var vialidateRoomsSelect = function (rooms, capacity) {
     if (rooms === AppartamentRooms.oneRoom && capacity !== AppartamentGuests.oneGuest) {
       selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
@@ -144,6 +150,7 @@
     });
     selectsTimeAccommodation.addEventListener('change', selectsTimeAccommodationChangeHandler);
     submitFormButton.addEventListener('click', formSubmitButtonClickHandler);
+    window.util.adForm.addEventListener('reset', resetFormHandler);
   };
 
   formValidate();
