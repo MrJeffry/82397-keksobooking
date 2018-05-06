@@ -43,6 +43,7 @@
   };
 
   var setFilterByRooms = function (filterValue, item) {
+    console.log(item)
     return filterValue === 'any' || item === filterValue;
   };
 
@@ -77,11 +78,9 @@
       if (!setFilterByRooms(roomsPriceSelect.value, item.offer.rooms)) {
         return false;
       }
-
       if (!setFilterGuests(apparmentGuestsSelect.value, item.offer.guests)) {
         return false;
       }
-
       return true;
     });
   };
@@ -104,6 +103,13 @@
   apparmentGuestsSelect.addEventListener('change', function () {
     window.filters.filterData = setFilters();
     window.pin.generatePins(window.filters.filterData);
+  });
+
+  allFeatures.forEach(function (item) {
+    item.addEventListener('change', function () {
+      window.filters.filterData = setFilters();
+      window.pin.generatePins(window.filters.filterData);
+    });
   });
 
   window.filters = {
