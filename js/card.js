@@ -14,10 +14,8 @@
 
   var createAdPhotos = function (arrayAdPhotos) {
     var adCardPhotosImg = adCardPhoto.querySelector('img');
-    if (!adCardPhotosImg) {
-      var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
-      adCardPhotosItems.src = arrayAdPhotos;
-    }
+    var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    adCardPhotosItems.src = arrayAdPhotos;
     return adCardPhotosItems;
   };
 
