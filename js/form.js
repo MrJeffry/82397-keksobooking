@@ -15,6 +15,10 @@
     Z_INDEX: 10
   };
 
+  var TIME_REMOVE_ELEMENT = 3000;
+
+  var NOT_EDITABLE_INPUT = 1;
+
   var AppartmentPrice = {
     'palace': 10000,
     'flat': 1000,
@@ -34,6 +38,13 @@
     'twoRooms': '2',
     'threeRooms': '3',
     'hundredRooms': '100'
+  };
+
+  var AppartamentGuestsErrors = {
+    'one-rooms': '1 комната — «для 1 гостя»',
+    'two-rooms': '2 комнаты — «для 2 гостей» или «для 1 гостя»',
+    'three-rooms': '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»',
+    'hundred-rooms': '«не для гостей»'
   };
 
   var inputs = window.util.adForm.querySelectorAll('fieldset');
@@ -58,13 +69,13 @@
 
   var vialidateRoomsSelect = function (rooms, capacity) {
     if (rooms === AppartamentRooms.oneRoom && capacity !== AppartamentGuests.oneGuest) {
-      selectPlace.setCustomValidity('1 комната — «для 1 гостя»');
+      selectPlace.setCustomValidity(AppartamentGuestsErrors['one-rooms']);
     } else if (rooms === AppartamentRooms.twoRooms && capacity !== AppartamentGuests.oneGuest && capacity !== AppartamentGuests.twoGuests) {
-      selectPlace.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
+      selectPlace.setCustomValidity(AppartamentGuestsErrors['two-rooms']);
     } else if (rooms === AppartamentRooms.threeRooms && capacity === AppartamentGuests.notGuests) {
-      selectPlace.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+      selectPlace.setCustomValidity(AppartamentGuestsErrors['three-rooms']);
     } else if (rooms === AppartamentRooms.hundredRooms && capacity !== AppartamentGuests.notGuests) {
-      selectPlace.setCustomValidity('«не для гостей»');
+      selectPlace.setCustomValidity(AppartamentGuestsErrors['hundred-rooms']);
     } else {
       selectPlace.setCustomValidity('');
     }
@@ -85,7 +96,7 @@
       success.classList.add('hidden');
       window.util.adForm.reset();
       addCoordinate();
-    }, 3000);
+    }, TIME_REMOVE_ELEMENT);
   };
 
   var errorFormSubmit = function (error) {
@@ -107,7 +118,7 @@
     window.util.body.appendChild(errorBlock);
     setTimeout(function () {
       errorBlock.remove();
-    }, 3000);
+    }, TIME_REMOVE_ELEMENT);
   };
 
   var formSubmitButtonClickHandler = function () {
@@ -123,7 +134,7 @@
     transformedArray.forEach(function (element) {
       element.disabled = inDisabled;
       if (inDisabled === false && element.children[1].id === 'address') {
-        element.children[1].readOnly = true;
+        element.children[NOT_EDITABLE_INPUT].readOnly = true;
       }
     });
   };

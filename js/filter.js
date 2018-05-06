@@ -22,11 +22,7 @@
 
   var allFeatures = filter.querySelectorAll('input[name="features"]');
 
-  var setFilterByHouseType = function (filterValue, item) {
-    return filterValue === 'any' || item === filterValue;
-  };
-
-  var setFilterByRoomsSelect = function (filterValue, item) {
+  var setFilterByProperty = function (filterValue, item) {
     return filterValue === 'any' || item === filterValue;
   };
 
@@ -61,7 +57,7 @@
     });
 
     return window.initialData.filter(function (item) {
-      if (!setFilterByHouseType(appartamentTypesSelect.value, item.offer.type)) {
+      if (!setFilterByProperty(appartamentTypesSelect.value, item.offer.type)) {
         return false;
       }
       if (!setFilterByPriceType(item.offer.price)) {
@@ -70,7 +66,10 @@
       if (!setFilterByFeautures(selectedFeatures, item.offer.features)) {
         return false;
       }
-      if (!setFilterByRoomsSelect(roomsRoomseSelect.value, item.offer.rooms)) {
+      if (!setFilterByProperty(roomsRoomseSelect.value, item.offer.rooms + '')) {
+        return false;
+      }
+      if (!setFilterByProperty(apparmentGuestsSelect.value, item.offer.guests + '')) {
         return false;
       }
 

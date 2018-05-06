@@ -6,11 +6,14 @@
     UPLOAD: 'https://js.dump.academy/keksobooking'
   };
 
-  var xhrConfig = function (onSuccess, onError) {
+  var XHR_STATUS_SUCCESS_OK = 200;
+  var XHR_TIMEOUT = 10000;
+
+  var setConfig = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === XHR_STATUS_SUCCESS_OK) {
         onSuccess(xhr.response);
       } else {
         onError('Стастус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -25,18 +28,18 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = XHR_TIMEOUT;
     return xhr;
   };
 
   var dataLoad = function (onSuccess, onError) {
-    var xhr = xhrConfig(onSuccess, onError);
+    var xhr = setConfig(onSuccess, onError);
     xhr.open('GET', URL.LOAD);
     xhr.send();
   };
 
   var dataUpload = function (data, onSuccess, onError) {
-    var xhr = xhrConfig(onSuccess, onError);
+    var xhr = setConfig(onSuccess, onError);
     xhr.open('POST', URL.UPLOAD);
     xhr.send(data);
   };

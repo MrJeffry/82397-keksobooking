@@ -14,7 +14,7 @@
 
   var createAdPhotos = function (arrayAdPhotos) {
     var adCardPhotosImg = adCardPhoto.querySelector('img');
-    if (adCardPhotosImg !== 'null') {
+    if (!adCardPhotosImg) {
       var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
       adCardPhotosItems.src = arrayAdPhotos;
     }
@@ -82,7 +82,7 @@
     adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
     adCardType.textContent = AppartmentTypes[pinContent.offer.type];
     adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
-      pinContent.offer.guest + ' гостей';
+      pinContent.offer.guests + ' гостей';
     adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
       ' , выезд до ' + pinContent.offer.checkout;
     buttonPopupClose.tabIndex = '0';
