@@ -47,14 +47,14 @@
   };
 
   var popupPressEscKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODE.ESCAPE) {
+    if (evt.keyCode === window.util.KEYCODES.ESCAPE) {
       adCard.remove();
       removePopupHandlers();
     }
   };
 
   var popupPressEnterKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODE.ENTER) {
+    if (evt.keyCode === window.util.KEYCODES.ENTER) {
       adCard.remove();
       removePopupHandlers();
     }

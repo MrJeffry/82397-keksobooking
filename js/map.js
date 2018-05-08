@@ -6,11 +6,12 @@
   var MAX_Y_POSITION = 568;
   var MIN_X_POSITION = 20;
 
+  var DEBOUNCE_INTERVAL = 500;
+
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
 
   var lastTimeout;
 
-  var DEBOUNCE_INTERVAL = 500;
 
   var setPinPosition = function (elem, position) {
     elem.style.top = position.y + 'px';

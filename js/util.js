@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var KEYCODE = {
+  var KEYCODES = {
     ESCAPE: 27,
     ENTER: 13
   };
@@ -36,7 +36,7 @@
   };
 
   window.util = {
-    KEYCODE: KEYCODE,
+    KEYCODES: KEYCODES,
     mapSection: mapSection,
     template: template,
     adForm: adForm,
