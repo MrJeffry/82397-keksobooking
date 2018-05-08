@@ -5,6 +5,7 @@
   var adCard = templateAdCard.cloneNode(true);
   var adCardPhoto = adCard.querySelector('.popup__photos');
   var buttonPopupClose = adCard.querySelector('.popup__close');
+
   var AppartmentTypes = {
     'palace': 'Дворец',
     'flat': 'Квартира',
