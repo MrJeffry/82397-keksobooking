@@ -32,7 +32,8 @@
   };
 
   var generatePins = function (arrayAd) {
-    arrayAd.forEach(function (item) {
+    var sliceArrayAd = arrayAd.slice(0, 5);
+    sliceArrayAd.forEach(function (item) {
       createPin(item);
     });
     addPinsToMap();

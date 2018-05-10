@@ -8,18 +8,19 @@
     'PNG': ''
   };
 
-  var previewImageContainer = document.querySelector('.ad-form-header__preview');
-  var uploadImagesControl = document.querySelector('.ad-form-header__input');
+  var avatarImgContainer = document.querySelector('.ad-form-header__preview');
+  var uploadavatarImgContainer = document.querySelector('.ad-form-header__input');
 
-  uploadImagesControl.addEventListener('change', onChangeInputFiles);
+  var uploadAdImageControl = window.util.adForm.querySelector('.ad-form__input');
+  var previewadImageContainer = window.util.adForm.querySelector('ad-form__photo');
 
-  function onChangeInputFiles(evt) {
+  var onChangeInputFiles = function () {
     for (var i = 0; i < this.files.length; i++) {
       showPreviewImage(this.files[i]);
     }
-  }
+  };
 
-  function showPreviewImage(imageFile) {
+  var showPreviewImage = function (imageFile) {
     var fileRegExp = new RegExp('^image/(' + Object.keys(TYPES_OF_IMAGES).join('|').replace('\+', '\\+') + ')$', 'i');
 
     if (!fileRegExp.test(imageFile.type)) {
@@ -29,12 +30,16 @@
     var fileReader = new FileReader();
     fileReader.addEventListener('load', displayImageViaFileRader);
     fileReader.readAsDataURL(imageFile);
-  }
+  };
 
-  function displayImageViaFileRader(evt) {
+  var displayImageViaFileRader = function (evt) {
     var uploadImage = document.createElement('img');
-    window.util.deleteAllElements(previewImageContainer, 'img');
-    previewImageContainer.appendChild(uploadImage);
+    window.util.deleteAllElements(avatarImgContainer, 'img');
+    avatarImgContainer.appendChild(uploadImage);
     uploadImage.src = evt.target.result;
-  }
+  };
+
+  uploadavatarImgContainer.addEventListener('change', onChangeInputFiles);
+  uploadAdImageControl.addEventListener('change', onChangeInputFiles);
+
 })();
