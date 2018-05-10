@@ -15,7 +15,7 @@
 
   var dropImageHendler = function (evt) {
     evt.target.style.backgroundColor = '';
-    evt.target.append(draggedItem);
+    evt.target.insertBefore(draggedItem, evt.target.children[0]);
     evt.preventDefault();
   };
 

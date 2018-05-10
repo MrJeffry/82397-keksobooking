@@ -1,17 +1,18 @@
 'use strict';
 
 (function () {
-  var templateAdCard = window.util.template.content.querySelector('.map__card');
-  var adCard = templateAdCard.cloneNode(true);
-  var adCardPhoto = adCard.querySelector('.popup__photos');
-  var buttonPopupClose = adCard.querySelector('.popup__close');
 
-  var AppartmentTypes = {
+  var APPARTMENT_TYPES = {
     'palace': 'Дворец',
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
     'house': 'Дом'
   };
+
+  var templateAdCard = window.util.template.content.querySelector('.map__card');
+  var adCard = templateAdCard.cloneNode(true);
+  var adCardPhoto = adCard.querySelector('.popup__photos');
+  var buttonPopupClose = adCard.querySelector('.popup__close');
 
   var createAdPhotos = function (arrayAdPhotos) {
     var adCardPhotosImg = adCardPhoto.querySelector('img');
@@ -79,7 +80,7 @@
     adCardTitle.textContent = pinContent.offer.title;
     adCardAdress.textContent = pinContent.offer.address;
     adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
-    adCardType.textContent = AppartmentTypes[pinContent.offer.type];
+    adCardType.textContent = APPARTMENT_TYPES[pinContent.offer.type];
     adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
       pinContent.offer.guests + ' гостей';
     adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
