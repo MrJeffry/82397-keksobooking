@@ -11,8 +11,8 @@
   var avatarImgContainer = window.util.adForm.querySelector('.ad-form-header__preview');
   var uploadAvatarImgContainer = window.util.adForm.querySelector('.ad-form-header__input');
   var uploadAdImageControl = window.util.adForm.querySelector('.ad-form__input');
-  var previewAdContainer = window.util.adForm.querySelector('.ad-form__photo');
-  var previewAdImageContainer = window.util.adForm.querySelector('.ad-form__photo-container');
+  var previewAdImage = window.util.adForm.querySelector('.ad-form__photo');
+  var previewAdContainer = window.util.adForm.querySelector('.ad-form__photo-container');
 
   var onChangeInputFiles = function (evt) {
     for (var i = 0; i < evt.target.files.length; i++) {
@@ -38,13 +38,29 @@
   };
 
   var displayImageViaFileRaderAddImg = function (evt) {
-    var clone = previewAdContainer.cloneNode();
+    var clonePreviewAdImage = previewAdImage.cloneNode();
+
     var uploadImage = document.createElement('img');
+
     uploadImage.style.width = 100 + '%';
     uploadImage.style.height = 100 + '%';
-    clone.appendChild(uploadImage);
-    previewAdImageContainer.appendChild(clone);
+    clonePreviewAdImage.draggable = true;
+
+    clonePreviewAdImage.appendChild(uploadImage);
+
+    var draggedItem = null;
+
+    previewAdContainer.appendChild(clonePreviewAdImage);
     uploadImage.src = evt.target.result;
+    clonePreviewAdImage.addEventListener('dragstart', window.draganddrop.dragstartImageHandler);
+
+    previewAdContainer.addEventListener('dragover', window.draganddrop.dragoverImageHandler);
+
+    previewAdContainer.addEventListener('drop', window.draganddrop.dropImageHendler);
+
+    previewAdContainer.addEventListener('dragenter', window.draganddrop.dragenterImageHandler);
+
+    previewAdContainer.addEventListener('dragleave', window.draganddrop.dragleaveImageHendler);
   };
 
   var displayImageViaFileRaderAvatar = function (evt) {
