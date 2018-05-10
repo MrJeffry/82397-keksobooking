@@ -1,44 +1,15 @@
 'use strict';
 
 (function () {
-  var CONTENT_WIDHT = 1200;
-  var MIN_Y_POSITION = 80;
-  var MAX_Y_POSITION = 568;
+  var DEBOUNCE_INTERVAL = 500;
+  var MIN_Y_POSITION = 150;
+  var MAX_Y_POSITION = 500;
   var MIN_X_POSITION = 20;
+  var MAX_X_POSITION = 1100;
 
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
 
   var lastTimeout;
-
-  var DEBOUNCE_INTERVAL = 500;
-
-  var setPinPosition = function (elem, position) {
-    elem.style.top = position.y + 'px';
-    elem.style.left = position.x + 'px';
-
-    var locationPositions = {
-      minX: MIN_X_POSITION,
-      maxX: CONTENT_WIDHT - MIN_X_POSITION,
-      minY: MIN_Y_POSITION,
-      maxY: MAX_Y_POSITION
-    };
-
-    if (elem.offsetTop <= locationPositions.minY) {
-      elem.style.top = MIN_Y_POSITION + 'px';
-    }
-
-    if (elem.offsetTop >= locationPositions.maxY) {
-      elem.style.top = MAX_Y_POSITION + 'px';
-    }
-
-    if (elem.offsetLeft <= -locationPositions.minX) {
-      elem.style.left = -MIN_X_POSITION + 'px';
-    }
-
-    if (elem.offsetLeft >= locationPositions.maxX) {
-      elem.style.left = (CONTENT_WIDHT - MIN_X_POSITION) + 'px';
-    }
-  };
 
   var filter = document.querySelector('.map__filters-container');
 
@@ -82,31 +53,37 @@
 
     var mapPinMainMousemoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
+
+      var setRestrictMainPinPosition = function (pinCoords, min, max) {
+        return Math.max(min, Math.min(pinCoords, max));
+      };
+
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
+
+      var mainPinLeft = mapPinMain.offsetLeft - shift.x;
+      var mainPinTop = mapPinMain.offsetTop - shift.y;
 
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
       };
 
-      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x + 'px');
-      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y + 'px');
+      mainPinLeft = setRestrictMainPinPosition(mainPinLeft, MIN_X_POSITION, MAX_X_POSITION);
+      mainPinTop = setRestrictMainPinPosition(mainPinTop, MIN_Y_POSITION, MAX_Y_POSITION);
 
-      var pinPosition = {
-        y: (mapPinMain.offsetTop - shift.y),
-        x: (mapPinMain.offsetLeft - shift.x)
-      };
+      mapPinMain.style.top = (mainPinTop) + 'px';
+      mapPinMain.style.left = (mainPinLeft) + 'px';
 
-      setPinPosition(mapPinMain, pinPosition);
       window.form.addCoordinate();
 
+      mapPinMain.addEventListener('mouseup', mapPinMainMouseupHandler);
     };
 
-    var mapPinMainMouseupHandler = function (e) {
-      e.preventDefault();
+    var mapPinMainMouseupHandler = function (mouseUpEvent) {
+      mouseUpEvent.preventDefault();
 
       document.removeEventListener('mousemove', mapPinMainMousemoveHandler);
       document.removeEventListener('mouseup', mapPinMainMouseupHandler);

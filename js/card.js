@@ -1,20 +1,37 @@
 'use strict';
 
 (function () {
-  var templateAdCard = window.util.template.content.querySelector('.map__card');
-  var adCard = templateAdCard.cloneNode(true);
-  var adCardPhoto = adCard.querySelector('.popup__photos');
-  var buttonPopupClose = adCard.querySelector('.popup__close');
-  var AppartmentTypes = {
+  var APPARTMENT_TYPES = {
     'palace': 'Дворец',
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
     'house': 'Дом'
   };
 
+  var CARD_IMAGES = {
+    WIDTH: 45,
+    HEIGHT: 40,
+    ALT: 'Фотография жилья'
+  };
+
+  var templateAdCard = window.util.template.content.querySelector('.map__card');
+  var adCard = templateAdCard.cloneNode(true);
+  var adCardPhoto = adCard.querySelector('.popup__photos');
+  var buttonPopupClose = adCard.querySelector('.popup__close');
+
   var createAdPhotos = function (arrayAdPhotos) {
     var adCardPhotosImg = adCardPhoto.querySelector('img');
-    var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    var adCardPhotosItems;
+
+    if (!adCardPhotosImg) {
+      adCardPhotosItems = document.createElement('img');
+      adCardPhotosItems.classList.add('popup__photo');
+      adCardPhotosItems.width = CARD_IMAGES.WIDTH;
+      adCardPhotosItems.height = CARD_IMAGES.HEIGHT;
+      adCardPhotosItems.alt = CARD_IMAGES.ALT;
+    } else {
+      adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    }
     adCardPhotosItems.src = arrayAdPhotos;
     return adCardPhotosItems;
   };
@@ -46,14 +63,14 @@
   };
 
   var popupPressEscKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODE.ESCAPE) {
+    if (evt.keyCode === window.util.KEYCODES.ESCAPE) {
       adCard.remove();
       removePopupHandlers();
     }
   };
 
   var popupPressEnterKeyHandler = function (evt) {
-    if (evt.keyCode === window.util.KEYCODE.ENTER) {
+    if (evt.keyCode === window.util.KEYCODES.ENTER) {
       adCard.remove();
       removePopupHandlers();
     }
@@ -78,7 +95,7 @@
     adCardTitle.textContent = pinContent.offer.title;
     adCardAdress.textContent = pinContent.offer.address;
     adCardPrice.innerHTML = pinContent.offer.price + '₽/<span>ночь</span>';
-    adCardType.textContent = AppartmentTypes[pinContent.offer.type];
+    adCardType.textContent = APPARTMENT_TYPES[pinContent.offer.type];
     adCardСapacity.textContent = pinContent.offer.rooms + ' комнаты для ' +
       pinContent.offer.guests + ' гостей';
     adCardTimes.textContent = 'Заезд после ' + pinContent.offer.checkin +
