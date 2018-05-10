@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var MIN_PRICE_VALUE = 10000;
   var MAX_PRICE_VALUE = 50000;
 

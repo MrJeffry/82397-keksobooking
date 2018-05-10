@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var TYPES_OF_IMAGES = {
     'GIF': '',
     'JPEG': '',
@@ -47,8 +46,6 @@
     clonePreviewAdImage.draggable = true;
 
     clonePreviewAdImage.appendChild(uploadImage);
-
-    var draggedItem = null;
 
     previewAdContainer.appendChild(clonePreviewAdImage);
     uploadImage.src = evt.target.result;

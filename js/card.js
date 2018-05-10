@@ -1,12 +1,17 @@
 'use strict';
 
 (function () {
-
   var APPARTMENT_TYPES = {
     'palace': 'Дворец',
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
     'house': 'Дом'
+  };
+
+  var CARD_IMAGES = {
+    WIDTH: 45,
+    HEIGHT: 40,
+    ALT: 'Фотография жилья'
   };
 
   var templateAdCard = window.util.template.content.querySelector('.map__card');
@@ -16,7 +21,17 @@
 
   var createAdPhotos = function (arrayAdPhotos) {
     var adCardPhotosImg = adCardPhoto.querySelector('img');
-    var adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    var adCardPhotosItems;
+
+    if (!adCardPhotosImg) {
+      adCardPhotosItems = document.createElement('img');
+      adCardPhotosItems.classList.add('popup__photo');
+      adCardPhotosItems.width = CARD_IMAGES.WIDTH;
+      adCardPhotosItems.height = CARD_IMAGES.HEIGHT;
+      adCardPhotosItems.alt = CARD_IMAGES.ALT;
+    } else {
+      adCardPhotosItems = adCardPhotosImg.cloneNode(true);
+    }
     adCardPhotosItems.src = arrayAdPhotos;
     return adCardPhotosItems;
   };

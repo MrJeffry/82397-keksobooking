@@ -6,6 +6,7 @@
   var dragstartImageHandler = function (evt) {
     draggedItem = evt.target;
     evt.dataTransfer.setData('text/plain', evt.target.alt);
+    evt.dataTransfer.effectAllowed = 'move';
   };
 
   var dragoverImageHandler = function (evt) {

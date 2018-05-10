@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // var CONTENT_WIDHT = 1200;
+  var DEBOUNCE_INTERVAL = 500;
   var MIN_Y_POSITION = 150;
   var MAX_Y_POSITION = 500;
   var MIN_X_POSITION = 20;
@@ -10,8 +10,6 @@
   var mapPinMain = window.util.mapSection.querySelector('.map__pin--main');
 
   var lastTimeout;
-
-  var DEBOUNCE_INTERVAL = 500;
 
   var filter = document.querySelector('.map__filters-container');
 
